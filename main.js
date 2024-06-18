@@ -3,6 +3,9 @@ const cube = [];
 //let planeArr = [];
 let axis;
 let angle;
+let direction;
+const speed = 0.05;
+let rotateFlag = false;
 // let rotateX = false;
 // let rotateY = false;
 // let rotateZ = false;
@@ -27,7 +30,7 @@ function setup() {
     angle = QUARTER_PI;
   }
   
-  function cutPlane(plane, deepth){
+  function cutPlane(plane, deepth, dir){
     //planeArr = cube.filter(item => item[plane] === deepth);
 
     cube.map(qb=> {
@@ -47,6 +50,8 @@ function setup() {
     }
 
     angle = 0;
+    rotateFlag = true;
+    direction = dir;
   }
   
 //   function planeXRotation(){
@@ -87,41 +92,55 @@ function setup() {
         }
     }
 
-    push();
-    
-    angle += 0.01;
-    rotate(angle, axis);
+    if(rotateFlag){
+        push();
+        
+        angle += speed * direction;
+        rotate(angle, axis);
 
-    for(let i = 0; i<cube.length; i++){
-        if(cube[i].isCut){
-            cube[i].render();
-        }
-    }
-
-    if(angle > HALF_PI){
-        let planeCut = cube.filter(qb => qb.isCut);
-        let planeMatrix = [];
-
-        let index = 0;
-        //convert plain array to matrix
-        for(let r = 0; r <= 2; r++){
-            planeMatrix[r] = [];
-            for(let c = 0; c <= 2; c++){
-                planeMatrix[r][c] = {x:planeCut[index].x, y:planeCut[index].y, z:planeCut[index].z};
-                index++;
+        for(let i = 0; i<cube.length; i++){
+            if(cube[i].isCut){
+                cube[i].render();
             }
         }
 
-        // rotate matrix
-        planeMatrix = dir === 1 ? planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse()) : planeMatrix[0].map((val, index) => planeMatrix.map(row => row[row.length-1-index]));
+        if(abs(angle) > HALF_PI){
+            rotateFlag = false;
+            let planeCut = cube.filter(qb => qb.isCut);
+            let planeMatrix = [];
 
-        planeCut.map(cubie=> {
-            // update matrix
-            
+            let index = 0;
+            //convert plain array to matrix
+            for(let r = 0; r <= 2; r++){
+                planeMatrix[r] = [];
+                for(let c = 0; c <= 2; c++){
+                    planeMatrix[r][c] = {x:planeCut[index].x, y:planeCut[index].y, z:planeCut[index].z};
+                    index++;
+                }
+            }
 
-            // clear cut
-            cubie.isCut = false;
-        });
+            // rotate matrix
+            planeMatrix = direction === 1 ? planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse()) : planeMatrix[0].map((val, index) => planeMatrix.map(row => row[row.length-1-index]));
+            //planeMatrix = planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse());
+
+            // update cube object
+            index = 0;
+            for(let r = 0; r <= 2; r++){
+                for(let c = 0; c <= 2; c++){
+                    planeCut[index].x = planeMatrix[r][c].x;
+                    planeCut[index].y = planeMatrix[r][c].y;
+                    planeCut[index].z = planeMatrix[r][c].z;
+                    planeCut[index].updateMatrix();
+
+                    // // face rotation
+                    planeCut[index].faceRotation();
+
+                    //clear cut
+                    planeCut[index].isCut = false;
+                    index++;
+                }
+            }
+        }
+        pop();
     }
-    pop();
   }

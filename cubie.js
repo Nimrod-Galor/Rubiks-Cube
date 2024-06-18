@@ -4,6 +4,7 @@ class Cubie{
         this.y = y;
         this.z = z;
         this.matrix = createVector(x, y, z);
+        
         this.faces = [
             new Face('top'),
             new Face('bottom'),
@@ -39,6 +40,19 @@ class Cubie{
     //     this.rotationX += angle;
     // }
 
+    updateMatrix(){
+        this.matrix = createVector(this.x, this.y, this.z);
+    }
+
+    faceRotation(){
+console.log(axis);
+        if(axis.z === 1){
+            
+        }
+
+    }
+
+
     render(){
         push();
         // render box
@@ -46,6 +60,9 @@ class Cubie{
         stroke(1);
         strokeWeight(4);
         //applyMatrix(this.matrix);
+
+        
+        
         
         translate(this.matrix.x * cubieSize, this.matrix.y * cubieSize, this.matrix.z * cubieSize);
         //rotateZ(this.rotationZ);
