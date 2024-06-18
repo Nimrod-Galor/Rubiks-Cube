@@ -17,7 +17,7 @@ function setup() {
     }
 
     cube[2].height = true;
-//    turnZ();
+
   }
   
   function plainRotation(plain, depth, dir){
@@ -26,9 +26,9 @@ function setup() {
 
         let index = 0;
         //convert plain array to matrix
-        for(let r = 0; r<=2; r++){
+        for(let r = 0; r <= 2; r++){
             plainMatrix[r] = [];
-            for(let c = 0; c<=2; c++){
+            for(let c = 0; c <= 2; c++){
                 plainMatrix[r][c] = {x:plainArr[index].x, y:plainArr[index].y, z:plainArr[index].z};
                 index++;
             }
@@ -39,11 +39,11 @@ function setup() {
 
         // update cube object
         index = 0;
-        for(let r = 0; r<=2; r++){
-            for(let c = 0; c<=2; c++){
+        for(let r = 0; r <= 2; r++){
+            for(let c = 0; c <= 2; c++){
                 plainArr[index].x = plainMatrix[r][c].x;
                 plainArr[index].y = plainMatrix[r][c].y;
-                plainArr[index].z = plainMatrix[r][c].z
+                plainArr[index].z = plainMatrix[r][c].z;
                 plainArr[index].updateMatrix();
 
                 index++;
@@ -58,7 +58,7 @@ function setup() {
     orbitControl();
 
     for(let i = 0; i<cube.length; i++){
-        cube[i].show();
+        cube[i].render();
     }
 
   }
