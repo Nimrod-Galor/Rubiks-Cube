@@ -11,7 +11,23 @@ class Cubie{
         this.faces[3] = new Face(createVector(0, -1, 0), createVector(-5, 0, 0), color(255, 255, 0));
         this.faces[4] = new Face(createVector(1, 0, 0), createVector(0, 5, 0), color(255, 150, 0));
         this.faces[5] = new Face(createVector(-1, 0, 0), createVector(0, -5, 0), color(255, 0, 0));
+    }
+
+    faceRotation(plain){
+        for(let i = 0 ; i < this.faces.length; i++){
+            switch(plain){
+                case 'x':
+                    this.faces[i].turnZ(HALF_PI);
+                break;
+                case 'y':
+                    this.faces[i].turnY(HALF_PI);
+                break;
+                case 'z':
+                    this.faces[i].turnZ(HALF_PI);
+                break;
             }
+        }
+    }
 
     render(){
         // Begin the drawing group.

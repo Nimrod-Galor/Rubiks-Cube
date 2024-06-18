@@ -34,7 +34,7 @@ function setup() {
             }
         }
 
-        // rotate matriz
+        // rotate matrix
         plainMatrix = dir === 1 ? plainMatrix[0].map((val, index) => plainMatrix.map(row => row[index]).reverse()) : plainMatrix[0].map((val, index) => plainMatrix.map(row => row[row.length-1-index]));
 
         // update cube object
@@ -46,16 +46,21 @@ function setup() {
                 plainArr[index].z = plainMatrix[r][c].z;
                 plainArr[index].updateMatrix();
 
+                // face rotation
+                plainArr[index].faceRotation(plain);
+
                 index++;
             }
         }
+
+        
   }
 
   function draw() {
     background(200);
     
     // Enable orbiting with the mouse.
-    orbitControl();
+    orbitControl(3,3,3);
 
     for(let i = 0; i<cube.length; i++){
         cube[i].render();
