@@ -4,9 +4,6 @@ class Cubie{
         this.y = y;
         this.z = z;
         this.matrix = createVector(x, y, z);
-        this.rotationX = 0;
-        this.rotationY = 0;
-        this.rotationZ = 0;
         this.faces = [
             new Face('top'),
             new Face('bottom'),
@@ -15,31 +12,32 @@ class Cubie{
             new Face('left'),
             new Face('right')
         ];
+        this.isCut = false;
     }
 
-    turnZ(angle){
-        this.matrix.x = this.matrix.x * cos(angle) - this.matrix.y * sin(angle);
-        this.matrix.y = this.matrix.x * sin(angle) + this.matrix.y * cos(angle);
-        this.matrix.z = this.matrix.z;
-        this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
-        this.rotationZ += angle;
-    }
+    // turnZ(angle){
+    //     this.matrix.x = this.matrix.x * cos(angle) - this.matrix.y * sin(angle);
+    //     this.matrix.y = this.matrix.x * sin(angle) + this.matrix.y * cos(angle);
+    //     this.matrix.z = this.matrix.z;
+    //     this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
+    //     this.rotationZ += angle;
+    // }
 
-    turnY(angle){
-        this.matrix.x = this.matrix.x * cos(angle) - this.matrix.z * sin(angle);
-        this.matrix.z = this.matrix.x * sin(angle) + this.matrix.z * cos(angle);
-        this.matrix.y = this.matrix.y;
-        this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
-        this.rotationY += angle;
-    }
+    // turnY(angle){
+    //     this.matrix.x = this.matrix.x * cos(angle) - this.matrix.z * sin(angle);
+    //     this.matrix.z = this.matrix.x * sin(angle) + this.matrix.z * cos(angle);
+    //     this.matrix.y = this.matrix.y;
+    //     this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
+    //     this.rotationY += angle;
+    // }
 
-    turnX(angle){
-        this.matrix.y = this.matrix.y * cos(angle) - this.matrix.z * sin(angle);
-        this.matrix.z = this.matrix.y * sin(angle) + this.matrix.z * cos(angle);
-        this.matrix.x = this.matrix.x;
-        this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
-        this.rotationX += angle;
-    }
+    // turnX(angle){
+    //     this.matrix.y = this.matrix.y * cos(angle) - this.matrix.z * sin(angle);
+    //     this.matrix.z = this.matrix.y * sin(angle) + this.matrix.z * cos(angle);
+    //     this.matrix.x = this.matrix.x;
+    //     this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
+    //     this.rotationX += angle;
+    // }
 
     render(){
         push();

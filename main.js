@@ -1,12 +1,14 @@
 const cubieSize = 100;
 const cube = [];
-
-let rotateX = false;
-let rotateY = false;
-let rotateZ = false;
-let rotationDeepth = 1;
-const rotationSpeed = 0.01;
-let rotationDir = 1;
+//let planeArr = [];
+let axis;
+let angle;
+// let rotateX = false;
+// let rotateY = false;
+// let rotateZ = false;
+// let rotationDeepth = 1;
+// const rotationSpeed = 0.01;
+// let rotationDir = 1;
 
 function setup() {
     createCanvas(800, 800, WEBGL);
@@ -21,53 +23,91 @@ function setup() {
             }
         }
     }
+
+    angle = QUARTER_PI;
   }
   
-  function planeXRotation(){
-    let planeArr = cube.filter(item => item.x === rotationDeepth);
+  function cutPlane(plane, deepth){
+    //planeArr = cube.filter(item => item[plane] === deepth);
 
-    for(let i = 0; i < planeArr.length; i++){
-        planeArr[i].turnX(rotationSpeed * rotationDir);
+    cube.map(qb=> {
+        qb.isCut = qb[plane] === deepth;
+    });
+
+    switch(plane){
+        case 'x':
+            axis = createVector(1, 0, 0);
+        break;
+        case 'y':
+            axis = createVector(0, 1, 0);
+        break;
+        case 'z':
+            axis = createVector(0, 0, 1);
+        break;
     }
+
+    angle = 0;
   }
+  
+//   function planeXRotation(){
+//     planeArr = cube.filter(item => item.x === rotationDeepth);
 
-  function planeYRotation(){
-    let planeArr = cube.filter(item => item.y === rotationDeepth);
+//     // for(let i = 0; i < planeArr.length; i++){
+//     //     planeArr[i].turnX(rotationSpeed * rotationDir);
+//     // }
+//   }
 
-    for(let i = 0; i < planeArr.length; i++){
-        planeArr[i].turnY(rotationSpeed * rotationDir);
-    }
-  }
+//   function planeYRotation(){
+//     planeArr = cube.filter(item => item.y === rotationDeepth);
 
-  function planeZRotation(){
-    let planeArr = cube.filter(item => item.z === rotationDeepth);
+//     // for(let i = 0; i < planeArr.length; i++){
+//     //     planeArr[i].turnY(rotationSpeed * rotationDir);
+//     // }
+//   }
 
-    for(let i = 0; i < planeArr.length; i++){
-        planeArr[i].turnZ(rotationSpeed * rotationDir);
-    }
-  }
+//   function planeZRotation(){
+//     planeArr = cube.filter(item => item.z === rotationDeepth);
+
+//     // for(let i = 0; i < planeArr.length; i++){
+//     //     planeArr[i].turnZ(rotationSpeed * rotationDir);
+//     // }
+//   }
 
   function draw() {
+    
     background(200);
     
     // Enable orbiting with the mouse.
-    orbitControl(3,3,3);
-
-    if(rotateX){
-        planeXRotation();
-    }
-
-    if(rotateY){
-        planeYRotation();
-    }
-
-    if(rotateZ){
-        planeZRotation();
-    }
+    orbitControl();
 
     // render cube
     for(let i = 0; i<cube.length; i++){
-        cube[i].render();
+        if(!cube[i].isCut){
+            cube[i].render();
+        }
     }
 
+    push();
+    
+    angle += 0.01;
+    rotate(angle, axis);
+
+    for(let i = 0; i<cube.length; i++){
+        if(cube[i].isCut){
+            cube[i].render();
+        }
+    }
+
+    if(angle > HALF_PI){
+        let planeCut = cube.filter(qb => qb.isCut);
+
+        planeCut.map(cubie=> {
+            // update matrix
+            
+
+            // clear cut
+            cubie.isCut = false;
+        });
+    }
+    pop();
   }
