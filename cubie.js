@@ -1,53 +1,63 @@
 class Cubie{
-    constructor(_x, _y, _z){
-        this.matrix = [];//_matrix;
-        this.x = _x;
-        this.y = _y;
-        this.z = _z;
-        this.faces = [];
-        this.faces[0] = new Face(createVector(0, 0, -1), createVector(0, 0, -5),  color(0, 0, 255));
-        this.faces[1] = new Face(createVector(0, 0, 1), createVector(0, 0, 5), color(0, 255, 0));
-        this.faces[2] = new Face(createVector(0, 1, 0), createVector(5, 0, 0), color(255, 255, 255));
-        this.faces[3] = new Face(createVector(0, -1, 0), createVector(-5, 0, 0), color(255, 255, 0));
-        this.faces[4] = new Face(createVector(1, 0, 0), createVector(0, 5, 0), color(255, 150, 0));
-        this.faces[5] = new Face(createVector(-1, 0, 0), createVector(0, -5, 0), color(255, 0, 0));
+    constructor(x, y, z){
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.matrix = createVector(x, y, z);
+        this.rotationX = 0;
+        this.rotationY = 0;
+        this.rotationZ = 0;
+        this.faces = [
+            new Face('top'),
+            new Face('bottom'),
+            new Face('front'),
+            new Face('back'),
+            new Face('left'),
+            new Face('right')
+        ];
     }
 
-    faceRotation(plain){
-        for(let i = 0 ; i < this.faces.length; i++){
-            switch(plain){
-                case 'x':
-                    this.faces[i].turnZ(HALF_PI);
-                break;
-                case 'y':
-                    this.faces[i].turnY(HALF_PI);
-                break;
-                case 'z':
-                    this.faces[i].turnZ(HALF_PI);
-                break;
-            }
-        }
+    turnZ(angle){
+        this.matrix.x = this.matrix.x * cos(angle) - this.matrix.y * sin(angle);
+        this.matrix.y = this.matrix.x * sin(angle) + this.matrix.y * cos(angle);
+        this.matrix.z = this.matrix.z;
+        this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
+        this.rotationZ += angle;
+    }
+
+    turnY(angle){
+        this.matrix.x = this.matrix.x * cos(angle) - this.matrix.z * sin(angle);
+        this.matrix.z = this.matrix.x * sin(angle) + this.matrix.z * cos(angle);
+        this.matrix.y = this.matrix.y;
+        this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
+        this.rotationY += angle;
+    }
+
+    turnX(angle){
+        this.matrix.y = this.matrix.y * cos(angle) - this.matrix.z * sin(angle);
+        this.matrix.z = this.matrix.y * sin(angle) + this.matrix.z * cos(angle);
+        this.matrix.x = this.matrix.x;
+        this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
+        this.rotationX += angle;
     }
 
     render(){
-        // Begin the drawing group.
         push();
-        //fill(255);
+        // render box
         noFill();
         stroke(1);
         strokeWeight(4);
-        applyMatrix(this.matrix);
-        box(10);
+        //applyMatrix(this.matrix);
+        
+        translate(this.matrix.x * cubieSize, this.matrix.y * cubieSize, this.matrix.z * cubieSize);
+        //rotateZ(this.rotationZ);
+        box(cubieSize);
         
         // render faces
-        for(let i=0; i<this.faces.length; i++){
+        for(let i = 0; i < this.faces.length; i++){
             this.faces[i].render();
         }
-        // End the drawing group.
         pop();
-    }
 
-    updateMatrix(){
-        this.matrix = [10, 0, 0, 0, 0, 10, 0, 0, 0, 0, 10, 0, 100 * this.x, 100 * this.y, 100 * this.z, 1];
     }
 }

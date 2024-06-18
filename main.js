@@ -1,59 +1,50 @@
+const cubieSize = 100;
 const cube = [];
+
+let rotateX = false;
+let rotateY = false;
+let rotateZ = false;
+let rotationDeepth = 1;
+const rotationSpeed = 0.01;
+let rotationDir = 1;
 
 function setup() {
     createCanvas(800, 800, WEBGL);
 
+    //initiate cube
     let index = 0;
     for(let x = -1; x<=1; x++){
         for(let y = -1; y<=1; y++){
             for(let z = -1; z<=1; z++){
-                //var matrix = [10, 0, 0, 0, 0, 10, 0, 0, 0, 0, 10, 0, 100 * x, 100 * y, 100 * z, 1];
-                //cube[index] = new Cubie(matrix, x, y, z);
                 cube[index] = new Cubie(x, y, z);
-                cube[index].updateMatrix();
                 index++;
             }
         }
     }
-
-    cube[2].height = true;
-
   }
   
-  function plainRotation(plain, depth, dir){
-        let plainMatrix = [];
-        let plainArr = cube.filter(item => item[plain] === depth);
+  function planeXRotation(){
+    let planeArr = cube.filter(item => item.x === rotationDeepth);
 
-        let index = 0;
-        //convert plain array to matrix
-        for(let r = 0; r <= 2; r++){
-            plainMatrix[r] = [];
-            for(let c = 0; c <= 2; c++){
-                plainMatrix[r][c] = {x:plainArr[index].x, y:plainArr[index].y, z:plainArr[index].z};
-                index++;
-            }
-        }
+    for(let i = 0; i < planeArr.length; i++){
+        planeArr[i].turnX(rotationSpeed * rotationDir);
+    }
+  }
 
-        // rotate matrix
-        plainMatrix = dir === 1 ? plainMatrix[0].map((val, index) => plainMatrix.map(row => row[index]).reverse()) : plainMatrix[0].map((val, index) => plainMatrix.map(row => row[row.length-1-index]));
+  function planeYRotation(){
+    let planeArr = cube.filter(item => item.y === rotationDeepth);
 
-        // update cube object
-        index = 0;
-        for(let r = 0; r <= 2; r++){
-            for(let c = 0; c <= 2; c++){
-                plainArr[index].x = plainMatrix[r][c].x;
-                plainArr[index].y = plainMatrix[r][c].y;
-                plainArr[index].z = plainMatrix[r][c].z;
-                plainArr[index].updateMatrix();
+    for(let i = 0; i < planeArr.length; i++){
+        planeArr[i].turnY(rotationSpeed * rotationDir);
+    }
+  }
 
-                // face rotation
-                plainArr[index].faceRotation(plain);
+  function planeZRotation(){
+    let planeArr = cube.filter(item => item.z === rotationDeepth);
 
-                index++;
-            }
-        }
-
-        
+    for(let i = 0; i < planeArr.length; i++){
+        planeArr[i].turnZ(rotationSpeed * rotationDir);
+    }
   }
 
   function draw() {
@@ -62,6 +53,19 @@ function setup() {
     // Enable orbiting with the mouse.
     orbitControl(3,3,3);
 
+    if(rotateX){
+        planeXRotation();
+    }
+
+    if(rotateY){
+        planeYRotation();
+    }
+
+    if(rotateZ){
+        planeZRotation();
+    }
+
+    // render cube
     for(let i = 0; i<cube.length; i++){
         cube[i].render();
     }

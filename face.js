@@ -1,40 +1,56 @@
+
+
 class Face{
-    constructor(normal, trans, color){
-        this.normal = normal;
-        this.trans = trans;
-        this.color = color;
+    constructor(type){
+        this.type = type;
+        this.faceTypes = {
+            top : {
+                normal : createVector(1, 0, 0),
+                pos : createVector(0, -50, 0),
+                color : color(255, 255, 0)
+            },
+            bottom : {
+                normal : createVector(-1, 0, 0),
+                pos : createVector(0, 50, 0),
+                color : color(255, 255, 255)
+            },
+            front : {
+                normal : createVector(0, 0, 1),
+                pos : createVector(0, 0, 50),
+                color : color(255, 0, 0)
+            },
+            back : {
+                normal : createVector(0, 0, 1),
+                pos : createVector(0, 0, -50),
+                color : color(255, 150, 0)
+            },
+            left : {
+                normal : createVector(0, 1, 0),
+                pos : createVector(-50, 0, 0),
+                color : color(0, 0, 255)
+            },
+            right : {
+                normal : createVector(0, -1, 0),
+                pos : createVector(50, 0, 0),
+                color : color(0, 255, 0)
+            },
+        }
     }
-
-    turnZ(angle){
-        let x = round(this.normal.x * cos(angle) - this.normal.y - sin(angle));
-        let y = round(this.normal.x * sin(angle) + this.normal.y - cos(angle));
-        let z = round(this.normal.z);
-        this.normal = createVector(x, y, z);
-    }
-
-    turnY(angle){
-        let x = round(this.normal.x * cos(angle) - this.normal.z - sin(angle));
-        let z = round(this.normal.x * sin(angle) + this.normal.z - cos(angle));
-        let y = round(this.normal.y);
-        this.normal = createVector(x, y, z);
-    }
-
-    turnX(angle){
-        let y = round(this.normal.y * cos(angle) - this.normal.z - sin(angle));
-        let z = round(this.normal.y * sin(angle) + this.normal.z - cos(angle));
-        let x = round(this.normal.x);
-        this.normal = createVector(x, y, z);
-    }
-
+    
     render(){
         push();
-        fill(this.color);
+        fill(this.faceTypes[this.type].color);
         noStroke();
-        rectMode(CENTER);
-        translate(this.trans);
-        rotate(HALF_PI, this.normal);
+        //rectMode(CENTER);
+        
+        //translate(this.normal.x * 50, this.normal.y * 50, this.normal.z * 50);
+        translate(this.faceTypes[this.type].pos);
+        rotate(HALF_PI, this.faceTypes[this.type].normal);
+        
         //square(0, 0, 10);
-        rect(0, 0, 10, 10);
+        //rect(0, 0, 10, 10);
+        plane(100, 100);
         pop();
     }
+    
 }
