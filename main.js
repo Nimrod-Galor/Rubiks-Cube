@@ -100,6 +100,20 @@ function setup() {
 
     if(angle > HALF_PI){
         let planeCut = cube.filter(qb => qb.isCut);
+        let planeMatrix = [];
+
+        let index = 0;
+        //convert plain array to matrix
+        for(let r = 0; r <= 2; r++){
+            planeMatrix[r] = [];
+            for(let c = 0; c <= 2; c++){
+                planeMatrix[r][c] = {x:planeCut[index].x, y:planeCut[index].y, z:planeCut[index].z};
+                index++;
+            }
+        }
+
+        // rotate matrix
+        planeMatrix = dir === 1 ? planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse()) : planeMatrix[0].map((val, index) => planeMatrix.map(row => row[row.length-1-index]));
 
         planeCut.map(cubie=> {
             // update matrix
