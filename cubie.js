@@ -54,12 +54,7 @@ class Cubie{
         this.isCut = false;
     }
 
-    updateMatrix(){
-        this.matrix = createVector(this.x, this.y, this.z);
-    }
-
     faceRotation(){
-//console.log(axis);
         let tmpArr = [];
         if(axis.z === 1){
             tmpArr = [this.faces[0], this.faces[5], this.faces[1], this.faces[4]];

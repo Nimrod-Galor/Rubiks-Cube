@@ -21,13 +21,14 @@ function setup() {
     for(let x = -1; x<=1; x++){
         for(let y = -1; y<=1; y++){
             for(let z = -1; z<=1; z++){
-                cube[index] = new Cubie(x, y, z);
+                cube[index] = new Cubie(x, y, z, index);
                 index++;
             }
         }
     }
 
-    angle = QUARTER_PI;
+    //angle = QUARTER_PI;
+
   }
   
   function cutPlane(plane, deepth, dir){
@@ -66,7 +67,7 @@ function setup() {
         }
     }
 
-    // update matrix
+    // update colors
     if(abs(angle) > HALF_PI){
         rotateFlag = false;
         let planeCut = cube.filter(qb => qb.isCut);
@@ -77,30 +78,25 @@ function setup() {
         for(let r = 0; r <= 2; r++){
             planeMatrix[r] = [];
             for(let c = 0; c <= 2; c++){
-                planeMatrix[r][c] = {x:planeCut[index].x, y:planeCut[index].y, z:planeCut[index].z};
+                planeMatrix[r][c] = planeCut[index].faces;
                 index++;
             }
         }
 
         // rotate matrix
-       // planeMatrix = direction === -1 ? planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse()) : planeMatrix[0].map((val, index) => planeMatrix.map(row => row[row.length-1-index]));
-        planeMatrix = planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse());
+        planeMatrix = direction === -1 ? planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse()) : planeMatrix[0].map((val, index) => planeMatrix.map(row => row[row.length-1-index]));
 
         // update cube object
         index = 0;
         for(let r = 0; r <= 2; r++){
             for(let c = 0; c <= 2; c++){
-                planeCut[index].x = planeMatrix[r][c].x;
-                planeCut[index].y = planeMatrix[r][c].y;
-                planeCut[index].z = planeMatrix[r][c].z;
-                
-                planeCut[index].updateMatrix();
-
-                // // face rotation
+                // update cubie colors
+                planeCut[index].faces = planeMatrix[r][c];
+                // faces rotation
                 planeCut[index].faceRotation();
-
-                //clear cut
+                //clear cut flag
                 planeCut[index].isCut = false;
+
                 index++;
             }
         }

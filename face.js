@@ -20,6 +20,7 @@ class Face{
         //square(0, 0, 10);
         //rect(0, 0, 10, 10);
         plane(100, 100);
+
         pop();
     }
     
