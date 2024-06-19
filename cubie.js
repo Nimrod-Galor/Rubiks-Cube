@@ -1,3 +1,41 @@
+/*
+this.faceTypes = {
+            top : {
+                normal : createVector(1, 0, 0),
+                pos : createVector(0, -50, 0),
+                color : color(255, 255, 0)
+            },
+            bottom : {
+                normal : createVector(-1, 0, 0),
+                pos : createVector(0, 50, 0),
+                color : color(255, 255, 255)
+            },
+            front : {
+                normal : createVector(0, 0, 1),
+                pos : createVector(0, 0, 50),
+                color : color(255, 0, 0)
+            },
+            back : {
+                normal : createVector(0, 0, 1),
+                pos : createVector(0, 0, -50),
+                color : color(255, 150, 0)
+            },
+            left : {
+                normal : createVector(0, 1, 0),
+                pos : createVector(-50, 0, 0),
+                color : color(0, 0, 255)
+            },
+            right : {
+                normal : createVector(0, -1, 0),
+                pos : createVector(50, 0, 0),
+                color : color(0, 255, 0)
+            },
+        }
+        */
+
+
+
+
 class Cubie{
     constructor(x, y, z){
         this.x = x;
@@ -6,50 +44,48 @@ class Cubie{
         this.matrix = createVector(x, y, z);
         
         this.faces = [
-            new Face('top'),
-            new Face('bottom'),
-            new Face('front'),
-            new Face('back'),
-            new Face('left'),
-            new Face('right')
+            new Face(createVector(1, 0, 0), createVector(0, -50, 0), color(255, 255, 0)),   //'top' 0
+            new Face(createVector(-1, 0, 0), createVector(0, 50, 0), color(255, 255, 255)), //'bottom' 1
+            new Face(createVector(0, 0, 1), createVector(0, 0, 50), color(255, 0, 0)),  //'front' 2
+            new Face(createVector(0, 0, -1), createVector(0, 0, -50), color(255, 150, 0)),   //'back' 3
+            new Face(createVector(0, 1, 0), createVector(-50, 0, 0), color(0, 0, 255)), //'left' 4
+            new Face(createVector(0, -1, 0), createVector(50, 0, 0), color(0, 255, 0))  //'right' 5
         ];
         this.isCut = false;
     }
-
-    // turnZ(angle){
-    //     this.matrix.x = this.matrix.x * cos(angle) - this.matrix.y * sin(angle);
-    //     this.matrix.y = this.matrix.x * sin(angle) + this.matrix.y * cos(angle);
-    //     this.matrix.z = this.matrix.z;
-    //     this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
-    //     this.rotationZ += angle;
-    // }
-
-    // turnY(angle){
-    //     this.matrix.x = this.matrix.x * cos(angle) - this.matrix.z * sin(angle);
-    //     this.matrix.z = this.matrix.x * sin(angle) + this.matrix.z * cos(angle);
-    //     this.matrix.y = this.matrix.y;
-    //     this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
-    //     this.rotationY += angle;
-    // }
-
-    // turnX(angle){
-    //     this.matrix.y = this.matrix.y * cos(angle) - this.matrix.z * sin(angle);
-    //     this.matrix.z = this.matrix.y * sin(angle) + this.matrix.z * cos(angle);
-    //     this.matrix.x = this.matrix.x;
-    //     this.matrix = createVector(this.matrix.x, this.matrix.y, this.matrix.z);
-    //     this.rotationX += angle;
-    // }
 
     updateMatrix(){
         this.matrix = createVector(this.x, this.y, this.z);
     }
 
     faceRotation(){
-console.log(axis);
+//console.log(axis);
+        let tmpArr = [];
         if(axis.z === 1){
-            
+            tmpArr = [this.faces[0], this.faces[5], this.faces[1], this.faces[4]];
         }
 
+        if(axis.x === 1){
+            tmpArr = [this.faces[3], this.faces[1], this.faces[2], this.faces[0]];
+        }
+
+        if(axis.y === 1){
+            tmpArr = [this.faces[2], this.faces[5], this.faces[3], this.faces[4]];
+        }
+
+        if(direction == -1){
+            let firstRem = tmpArr[0].color;
+            for(let i = 0; i < tmpArr.length-1; i++){
+                tmpArr[i].color = tmpArr[i+1].color;
+            }
+            tmpArr[tmpArr.length-1].color = firstRem;
+        }else{
+            let lastRem = tmpArr[tmpArr.length - 1].color;
+            for(let i = tmpArr.length-1; i > 0; i--){
+                tmpArr[i].color = tmpArr[i-1].color;
+            }
+            tmpArr[0].color = lastRem;
+        }
     }
 
 
