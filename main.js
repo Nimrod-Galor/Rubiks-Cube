@@ -32,8 +32,7 @@ function setup() {
   }
   
   function cutPlane(plane, deepth, dir){
-    //planeArr = cube.filter(item => item[plane] === deepth);
-
+    // update plane cut flag
     cube.map(qb=> {
         qb.isCut = qb[plane] === deepth;
     });
@@ -57,17 +56,18 @@ function setup() {
   
   function rotatePlane(){
     push();
-        
+    // translate rotation
     angle += speed * direction;
     rotate(angle, axis);
 
     for(let i = 0; i<cube.length; i++){
         if(cube[i].isCut){
+            // render only cut plane
             cube[i].render();
         }
     }
 
-    // update colors
+    // update colors position
     if(abs(angle) > HALF_PI){
         rotateFlag = false;
         let planeCut = cube.filter(qb => qb.isCut);
@@ -84,7 +84,7 @@ function setup() {
         }
 
         // rotate matrix
-        planeMatrix = direction === -1 ? planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse()) : planeMatrix[0].map((val, index) => planeMatrix.map(row => row[row.length-1-index]));
+        planeMatrix = direction === -1 && axis.y === 0 ? planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse()) : planeMatrix[0].map((val, index) => planeMatrix.map(row => row[row.length-1-index]));
 
         // update cube object
         index = 0;
@@ -92,8 +92,10 @@ function setup() {
             for(let c = 0; c <= 2; c++){
                 // update cubie colors
                 planeCut[index].faces = planeMatrix[r][c];
+
                 // faces rotation
                 planeCut[index].faceRotation();
+
                 //clear cut flag
                 planeCut[index].isCut = false;
 
@@ -105,7 +107,7 @@ function setup() {
   }
 
   function draw() {
-    
+    // set background color
     background(200);
     
     // Enable orbiting with the mouse.
@@ -117,8 +119,9 @@ function setup() {
             cube[i].render();
         }
     }
-
+    
     if(rotateFlag){
+        // rotate cut plane
         rotatePlane();
     }
   }

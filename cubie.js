@@ -65,6 +65,7 @@ class Cubie{
         }
 
         if(axis.y === 1){
+            //tmpArr = [this.faces[2], this.faces[5], this.faces[3], this.faces[4]];
             tmpArr = [this.faces[2], this.faces[5], this.faces[3], this.faces[4]];
         }
 
@@ -83,27 +84,18 @@ class Cubie{
         }
     }
 
-
+    // render cubie
     render(){
         push();
-        // render box
         noFill();
         stroke(1);
         strokeWeight(4);
-        //applyMatrix(this.matrix);
-
-        
-        
-        
         translate(this.matrix.x * cubieSize, this.matrix.y * cubieSize, this.matrix.z * cubieSize);
-        //rotateZ(this.rotationZ);
         box(cubieSize);
-        
-        // render faces
+        // render faces (colors)
         for(let i = 0; i < this.faces.length; i++){
             this.faces[i].render();
         }
         pop();
-
     }
 }
