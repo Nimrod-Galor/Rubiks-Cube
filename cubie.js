@@ -65,7 +65,6 @@ class Cubie{
         }
 
         if(axis.y === 1){
-            //tmpArr = [this.faces[2], this.faces[5], this.faces[3], this.faces[4]];
             tmpArr = [this.faces[2], this.faces[5], this.faces[3], this.faces[4]];
         }
 
@@ -82,6 +81,10 @@ class Cubie{
             }
             tmpArr[0].color = lastRem;
         }
+    }
+
+    clicked(){
+        console.log(this.matrix.x);
     }
 
     // render cubie

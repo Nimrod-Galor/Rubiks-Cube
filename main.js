@@ -1,3 +1,4 @@
+let cam;
 const cubieSize = 100;
 const cube = [];
 //let planeArr = [];
@@ -15,6 +16,9 @@ let rotateFlag = false;
 
 function setup() {
     createCanvas(800, 800, WEBGL);
+
+    cam = createCamera();
+    cam.setPosition(0, 0, 750);
 
     //initiate cube
     let index = 0;
@@ -123,5 +127,12 @@ function setup() {
     if(rotateFlag){
         // rotate cut plane
         rotatePlane();
+    }
+  }
+
+  function mousePressed(){
+    console.log(`x:${mouseX} y:${mouseY}`)
+    for(let i = 0; i < cube.length; i++){
+        cube[i].clicked();
     }
   }
