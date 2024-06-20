@@ -1,18 +1,11 @@
-let cam;
-const cubieSize = 100;
-const cube = [];
-//let planeArr = [];
-let axis;
-let angle;
-let direction;
-const speed = 0.05;
-let rotateFlag = false;
-// let rotateX = false;
-// let rotateY = false;
-// let rotateZ = false;
-// let rotationDeepth = 1;
-// const rotationSpeed = 0.01;
-// let rotationDir = 1;
+var cam;
+var cube;
+
+let cutPlaneAxis;
+let cutPlaneAngle;
+let cutPlaneDirection;
+const cutPlaneSpeed = 0.05;
+let cutPlaneRotateFlag = false;
 
 function setup() {
     createCanvas(800, 800, WEBGL);
@@ -20,61 +13,50 @@ function setup() {
     cam = createCamera();
     cam.setPosition(0, 0, 750);
 
-    //initiate cube
-    let index = 0;
-    for(let x = -1; x<=1; x++){
-        for(let y = -1; y<=1; y++){
-            for(let z = -1; z<=1; z++){
-                cube[index] = new Cubie(x, y, z, index);
-                index++;
-            }
-        }
-    }
-
-    //angle = QUARTER_PI;
+    cube = new Cube();
 
   }
   
   function cutPlane(plane, deepth, dir){
     // update plane cut flag
-    cube.map(qb=> {
+    cube.cubies.map(qb=> {
         qb.isCut = qb[plane] === deepth;
     });
 
     switch(plane){
         case 'x':
-            axis = createVector(1, 0, 0);
+            cutPlaneAxis = createVector(1, 0, 0);
         break;
         case 'y':
-            axis = createVector(0, 1, 0);
+            cutPlaneAxis = createVector(0, 1, 0);
         break;
         case 'z':
-            axis = createVector(0, 0, 1);
+            cutPlaneAxis = createVector(0, 0, 1);
         break;
     }
 
-    angle = 0;
-    rotateFlag = true;
-    direction = dir;
+    cutPlaneAngle = 0;
+    cutPlaneRotateFlag = true;
+    cutPlaneDirection = dir;
   }
   
   function rotatePlane(){
     push();
     // translate rotation
-    angle += speed * direction;
-    rotate(angle, axis);
+    cutPlaneAngle += cutPlaneSpeed * cutPlaneDirection;
+    rotate(cutPlaneAngle, cutPlaneAxis);
 
-    for(let i = 0; i<cube.length; i++){
-        if(cube[i].isCut){
+    for(let i = 0; i<cube.cubies.length; i++){
+        if(cube.cubies[i].isCut){
             // render only cut plane
-            cube[i].render();
+            cube.cubies[i].render();
         }
     }
 
     // update colors position
-    if(abs(angle) > HALF_PI){
-        rotateFlag = false;
-        let planeCut = cube.filter(qb => qb.isCut);
+    if(abs(cutPlaneAngle) > HALF_PI){
+        cutPlaneRotateFlag = false;
+        let planeCut = cube.cubies.filter(qb => qb.isCut);
         let planeMatrix = [];
 
         let index = 0;
@@ -88,7 +70,7 @@ function setup() {
         }
 
         // rotate matrix
-        planeMatrix = direction === -1 && axis.y === 0 ? planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse()) : planeMatrix[0].map((val, index) => planeMatrix.map(row => row[row.length-1-index]));
+        planeMatrix = cutPlaneDirection === -1 && cutPlaneAxis.y === 0 ? planeMatrix[0].map((val, index) => planeMatrix.map(row => row[index]).reverse()) : planeMatrix[0].map((val, index) => planeMatrix.map(row => row[row.length-1-index]));
 
         // update cube object
         index = 0;
@@ -115,24 +97,41 @@ function setup() {
     background(200);
     
     // Enable orbiting with the mouse.
-    orbitControl();
+   // orbitControl();
 
     // render cube
-    for(let i = 0; i<cube.length; i++){
-        if(!cube[i].isCut){
-            cube[i].render();
+    push();
+    // rotate cube
+    angleMode(DEGREES);
+    rotateX(cube.xAngle);
+    rotateY(cube.yAngle);
+   // rotateZ(cube.zAngle);
+    angleMode(RADIANS);
+    
+    for(let i = 0; i<cube.cubies.length; i++){
+        if(!cube.cubies[i].isCut){
+            cube.cubies[i].render();
         }
     }
     
-    if(rotateFlag){
+    if(cutPlaneRotateFlag){
         // rotate cut plane
         rotatePlane();
     }
+
+    pop();
+
+
+  }
+
+  function mouseDragged(){
+    cube.yAngle += (mouseX - pmouseX) * 0.05;
+    cube.xAngle += (pmouseY - mouseY) * 0.05;
   }
 
   function mousePressed(){
     console.log(`x:${mouseX} y:${mouseY}`)
-    for(let i = 0; i < cube.length; i++){
-        cube[i].clicked();
+    for(let i = 0; i < cube.cubies.length; i++){
+        cube.cubies[i].clicked();
     }
   }

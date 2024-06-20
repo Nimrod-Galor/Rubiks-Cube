@@ -56,19 +56,19 @@ class Cubie{
 
     faceRotation(){
         let tmpArr = [];
-        if(axis.z === 1){
+        if(cutPlaneAxis.z === 1){
             tmpArr = [this.faces[0], this.faces[5], this.faces[1], this.faces[4]];
         }
 
-        if(axis.x === 1){
+        if(cutPlaneAxis.x === 1){
             tmpArr = [this.faces[3], this.faces[1], this.faces[2], this.faces[0]];
         }
 
-        if(axis.y === 1){
+        if(cutPlaneAxis.y === 1){
             tmpArr = [this.faces[2], this.faces[5], this.faces[3], this.faces[4]];
         }
 
-        if(direction == -1){
+        if(cutPlaneDirection == -1){
             let firstRem = tmpArr[0].color;
             for(let i = 0; i < tmpArr.length-1; i++){
                 tmpArr[i].color = tmpArr[i+1].color;
@@ -93,8 +93,8 @@ class Cubie{
         noFill();
         stroke(1);
         strokeWeight(4);
-        translate(this.matrix.x * cubieSize, this.matrix.y * cubieSize, this.matrix.z * cubieSize);
-        box(cubieSize);
+        translate(this.matrix.x * cube.cubieSize, this.matrix.y * cube.cubieSize, this.matrix.z * cube.cubieSize);
+        box(cube.cubieSize);
         // render faces (colors)
         for(let i = 0; i < this.faces.length; i++){
             this.faces[i].render();
