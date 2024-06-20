@@ -11,7 +11,7 @@ function setup() {
     createCanvas(800, 800, WEBGL);
 
     cam = createCamera();
-    cam.setPosition(0, 0, 750);
+    cam.setPosition(0, 0, 800);
 
     cube = new Cube();
 
