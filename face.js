@@ -1,17 +1,15 @@
 class Face{
-    constructor(normal, pos, color){
+    constructor(normal, colorIndex, vertices){
         this.normal = normal;
-        this.pos = pos;
-        this.color = color;
+        this.colorIndex = colorIndex;
+        this.vertices = vertices;
     }
     
     render(){
         push();
         fill(this.color);
-        noStroke();
-        translate(this.pos);
-        rotate(HALF_PI, this.normal);
-        plane(100, 100);
+        stroke(2);
+        plane(cube.cubieSize, cube.cubieSize);
         pop();
     }
 }
