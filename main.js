@@ -11,7 +11,7 @@ function setup() {
     cube = new Cube(3, 100); //dimantion, cubieSize
     cube.initFaces();
 
-    cube.rotateCube(45, 45, -35);
+    cube.rotateCube(-45, 45, -35);
   }
   
 
@@ -23,11 +23,11 @@ function setup() {
     
     cube.render();
 
-    push();
-    stroke('purple');
-    strokeWeight(10);
+    // push();
+    // stroke('purple');
+    // strokeWeight(10);
 
-    // Bottom-right.
-    point(0, 0, 150);
-    pop();
+    // // Bottom-right.
+    // point(0, 0, 250);
+    // pop();
   }

@@ -14,8 +14,11 @@ class Cube{
     }
 
     initFaces(){
+        // SET CAMERA DISTANCE
+        camera(0, 0, Math.min(this.dimantion * 250, 6000));
+
         //initiate cube
-        let R = Math.floor(this.dimantion * 0.5)  * this.cubieSize; // the size of half cube
+        let R = this.dimantion * 0.5  * this.cubieSize - (this.cubieSize * 0.5); // the size of half cube
         for(let z = 0; z < this.dimantion; z++){
             for(let x = 0; x < this.dimantion; x++){
                 for(let y = 0; y < this.dimantion; y++){
