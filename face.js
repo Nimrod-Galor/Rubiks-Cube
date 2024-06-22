@@ -1,9 +1,14 @@
 class Face{
-    constructor(normal, colorIndex, hierarchy, vertices){
+    constructor(normal, colorIndex, hierarchy){
         this.normal = normal;
         this.colorIndex = colorIndex;
         this.hierarchy = hierarchy;
-        this.vertices = vertices;
+        this.vertices = [
+            [-cube.cubieSize * 0.5, -cube.cubieSize * 0.5, 0],
+            [cube.cubieSize * 0.5, -cube.cubieSize * 0.5, 0],
+            [cube.cubieSize * 0.5, cube.cubieSize * 0.5, 0],
+            [-cube.cubieSize * 0.5, cube.cubieSize * 0.5, 0]
+        ];
     }
 
     rotatePlane(xAngle, yAngle, zAngle){
