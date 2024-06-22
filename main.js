@@ -8,8 +8,10 @@ function setup() {
     cam = createCamera();
     cam.setPosition(0, 0, 800);
 
-    cube = new Cube();
+    cube = new Cube(3, 100); //dimantion, cubieSize
+    cube.initFaces();
 
+    cube.rotateCube(45, 45, -35);
   }
   
 
@@ -19,6 +21,13 @@ function setup() {
     background(200);
     
     
+    cube.render();
 
+    push();
+    stroke('purple');
+    strokeWeight(10);
 
+    // Bottom-right.
+    point(0, 0, 150);
+    pop();
   }
