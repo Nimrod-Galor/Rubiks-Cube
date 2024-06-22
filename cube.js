@@ -29,7 +29,7 @@ class Cube{
                         let mx = x * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = -R - this.cubieSize * 0.5;
-                        f.movePlane(mx, my, mz);
+                        f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
                     
@@ -39,7 +39,7 @@ class Cube{
                         let mx = x * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = R + this.cubieSize * 0.5;
-                        f.movePlane(mx, my, mz);
+                        f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
 
@@ -49,8 +49,8 @@ class Cube{
                         let mx = x * this.cubieSize - R;
                         let my = z * this.cubieSize - R;
                         let mz = R + this.cubieSize * 0.5;
-                        f.movePlane(mx, my, mz);
-                        f.rotatePlane(90, 0, 0);
+                        f.moveFace(mx, my, mz);
+                        f.rotateFace(90, 0, 0);
                         this.faces.push(f);
                     }
 
@@ -60,8 +60,8 @@ class Cube{
                         let mx = x * this.cubieSize - R;
                         let my = z * this.cubieSize - R;
                         let mz = -R - this.cubieSize * 0.5;
-                        f.movePlane(mx, my, mz);
-                        f.rotatePlane(90, 0, 0);
+                        f.moveFace(mx, my, mz);
+                        f.rotateFace(90, 0, 0);
                         this.faces.push(f);
                     }
 
@@ -71,8 +71,8 @@ class Cube{
                         let mx = x * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = -R - this.cubieSize * 0.5;
-                        f.movePlane(mx, my, mz);
-                        f.rotatePlane(0, 90, 0);
+                        f.moveFace(mx, my, mz);
+                        f.rotateFace(0, 90, 0);
                         this.faces.push(f);
                     }
 
@@ -82,8 +82,8 @@ class Cube{
                         let mx = x * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = R + this.cubieSize * 0.5;
-                        f.movePlane(mx, my, mz);
-                        f.rotatePlane(0, 90, 0);
+                        f.moveFace(mx, my, mz);
+                        f.rotateFace(0, 90, 0);
                         this.faces.push(f);
                     }
                 }
@@ -99,7 +99,7 @@ class Cube{
 
     rotateCube(x, y, z){
         for(let i = 0 ; i < this.faces.length; i++){
-            this.faces[i].rotatePlane(x, y, z);
+            this.faces[i].rotateFace(x, y, z);
         }
     }
 

@@ -9,9 +9,10 @@ class Face{
             [cube.cubieSize * 0.5, cube.cubieSize * 0.5, 0],
             [-cube.cubieSize * 0.5, cube.cubieSize * 0.5, 0]
         ];
+        this.isVisible = false;
     }
 
-    rotatePlane(xAngle, yAngle, zAngle){
+    rotateFace(xAngle, yAngle, zAngle){
         let thetaX = radians(xAngle);
         let thetaY = radians(yAngle);
         let thetaZ = radians(zAngle);
@@ -28,7 +29,7 @@ class Face{
 
     }
 
-    movePlane(x, y, z){
+    moveFace(x, y, z){
         for(let i = 0 ; i < this.vertices.length; i++){
             this.vertices[i][0] += x;
             this.vertices[i][1] += y;
