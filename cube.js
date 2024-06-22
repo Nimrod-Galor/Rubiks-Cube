@@ -54,7 +54,7 @@ class Cube{
                         this.faces.push(f);
                     }
 
-                    if(y === 0){ // bottom face
+                    if(y === this.dimantion - 1){ // bottom face
                         let normal = createVector(0, -1, 0);
                         let f = new Face(normal, 5, hierarchy);
                         let mx = x * this.cubieSize - R;
@@ -65,22 +65,22 @@ class Cube{
                         this.faces.push(f);
                     }
 
-                    if(y === 0){ // left face
+                    if(z === 0){ // left face
                         let normal = createVector(-1, 0, 0);
                         let f = new Face(normal, 4, hierarchy);
                         let mx = x * this.cubieSize - R;
-                        let my = z * this.cubieSize - R;
+                        let my = y * this.cubieSize - R;
                         let mz = -R - this.cubieSize * 0.5;
                         f.movePlane(mx, my, mz);
                         f.rotatePlane(0, 90, 0);
                         this.faces.push(f);
                     }
 
-                    if(y === 0){ // right face
+                    if(z ===  this.dimantion - 1){ // right face
                         let normal = createVector(1, 0, 0);
                         let f = new Face(normal, 2, hierarchy);
                         let mx = x * this.cubieSize - R;
-                        let my = z * this.cubieSize - R;
+                        let my = y * this.cubieSize - R;
                         let mz = R + this.cubieSize * 0.5;
                         f.movePlane(mx, my, mz);
                         f.rotatePlane(0, 90, 0);

@@ -26,9 +26,6 @@ class Face{
         // Rotate each vertex
         this.vertices = this.vertices.map(vertex => rotatePoint(vertex, R));
 
-        console.log(this.vertices);
-
-        
     }
 
     movePlane(x, y, z){

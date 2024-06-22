@@ -1,6 +1,6 @@
 var cam;
 var cube;
-
+const rotationSpeed = 0.05;
 
 function setup() {
     createCanvas(800, 800, WEBGL);
@@ -12,15 +12,15 @@ function setup() {
     cube.initFaces();
 
     cube.rotateCube(-45, 45, -35);
-  }
+}
   
 
 
-  function draw() {
+function draw() {
     // set background color
     background(200);
-    
-    
+
+
     cube.render();
 
     // push();
@@ -30,4 +30,19 @@ function setup() {
     // // Bottom-right.
     // point(0, 0, 250);
     // pop();
-  }
+}
+
+function mousePressed(){
+
+}
+
+function mouseReleased(){
+    
+}
+
+function mouseDragged() {
+    let y = (pmouseX - mouseX) * -rotationSpeed;
+    let x = (pmouseY - mouseY) * rotationSpeed;
+
+    cube.rotateCube(x, y, 0);
+}
