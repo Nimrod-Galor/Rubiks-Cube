@@ -7,6 +7,7 @@ function setup() {
 
     cam = createCamera();
     cam.setPosition(0, 0, 800);
+    ortho();
 
     cube = new Cube(3, 100); //dimantion, cubieSize
     cube.initFaces();
@@ -33,16 +34,18 @@ function draw() {
 }
 
 function mousePressed(){
-
+    cube.cubeRotate = !cube.faceClicked(mouseX - (width * 0.5), mouseY - (width * 0.5));
 }
 
 function mouseReleased(){
-    
+    cube.cubeRotate = false;
 }
 
 function mouseDragged() {
     let y = (pmouseX - mouseX) * -rotationSpeed;
     let x = (pmouseY - mouseY) * rotationSpeed;
 
-    cube.rotateCube(x, y, 0);
+    if(cube.cubeRotate){
+        cube.rotateCube(x, y, 0);
+    }
 }

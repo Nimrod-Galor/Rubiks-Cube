@@ -18,7 +18,8 @@ class Cube{
             {faceId : 'bottom', normal: [0, 1, 0], isVisible : false},
             {faceId : 'right', normal: [1, 0, 0], isVisible : false},
             {faceId : 'left', normal: [-1, 0, 0], isVisible : false},
-        ]
+        ];
+        this.cubeRotate = false;
     }
 
     initFaces(){
@@ -126,5 +127,13 @@ class Cube{
         }
     }
 
-
+    faceClicked(x, y){
+        for(let i = 0; i < this.faces.length; i++){
+            if(this.faces[i].isVisible && isPointInPolygon(x, y, this.faces[i].vertices)){
+                // click was inside face
+                return true;
+            }
+        }
+        return false;
+    }
 }

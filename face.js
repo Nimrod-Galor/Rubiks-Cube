@@ -109,6 +109,9 @@ function rotatePoint(point, rotationMatrix) {
     return result;
 }
 
+
+
+
 // Function to check if a point is inside a polygon using ray-casting algorithm
 function isPointInPolygon(x, y, vertices) {
     // let x = pointX, y = pointY;
