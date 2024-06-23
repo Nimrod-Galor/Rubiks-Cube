@@ -10,6 +10,14 @@ class Cube{
             color(255, 150, 0), // 3 back orange
             color(0, 255, 0), // 4 left green
             color(255, 255, 0) // 5 bottom yellow
+        ];
+        this.orientation = [
+            {faceId : 'back', normal: [0, 0, -1], isVisible : false},
+            {faceId : 'front', normal: [0, 0, 1], isVisible : false},
+            {faceId : 'top', normal: [0, -1, 0], isVisible : false},
+            {faceId : 'bottom', normal: [0, 1, 0], isVisible : false},
+            {faceId : 'right', normal: [1, 0, 0], isVisible : false},
+            {faceId : 'left', normal: [-1, 0, 0], isVisible : false},
         ]
     }
 
@@ -87,14 +95,36 @@ class Cube{
 
     render(){
         for(let i = 0 ; i < this.faces.length; i++){
-            this.faces[i].render();
+            if(this.faces[i].isVisible){
+                this.faces[i].render();
+            }
         }
     }
 
     rotateCube(x, y, z){
+        // update face orientation normal
+        for(let i = 0; i < this.orientation.length; i++){
+            let thetaX = radians(x);
+            let thetaY = radians(y);
+            let thetaZ = radians(z);
+            
+            // Rotation matrices
+            let Rx = rotationMatrixX(thetaX);
+            let Ry = rotationMatrixY(thetaY);
+            let Rz = rotationMatrixZ(thetaZ);
+            // Combined rotation matrix Rz * Ry * Rx
+            let R = multiplyMatrices(multiplyMatrices(Rz, Ry), Rx);
+            
+            this.orientation[i].normal = rotatePoint(this.orientation[i].normal, R);
+            
+            cube.orientation[i].isVisible = isTriangleFacingCamera(cube.orientation[i].normal);
+        }
+        
         for(let i = 0 ; i < this.faces.length; i++){
             this.faces[i].rotateFace(x, y, z);
+            this.faces[i].isVisible = cube.orientation[cube.orientation.findIndex(item => item.faceId === this.faces[i].type)].isVisible;
         }
     }
+
 
 }
