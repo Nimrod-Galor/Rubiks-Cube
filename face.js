@@ -44,8 +44,10 @@ class Face{
         beginShape();
 
         for(let i = 0 ; i < this.vertices.length; i++){
+            // calculate point perspective
+            let vp = pointToPerspective(this.vertices[i]);
             // Add vertices.
-            vertex(this.vertices[i][0], this.vertices[i][1], this.vertices[i][2]);
+            vertex(vp[0], vp[1], vp[2]);
         }
 
         // Stop drawing the shape.
@@ -108,8 +110,14 @@ function rotatePoint(point, rotationMatrix) {
     }
     return result;
 }
+const fov = 800;
 
-
+function pointToPerspective(point){
+    const scale = fov / (fov - point[2]);
+    let px = point[0] * scale;// * width / 2 + width / 2;
+    let py = point[1] * scale;// * height / 2 + height / 2;
+    return [px, py, point[2]];
+}
 
 
 // Function to check if a point is inside a polygon using ray-casting algorithm
@@ -118,8 +126,13 @@ function isPointInPolygon(x, y, vertices) {
     let inside = false;
 
     for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
-        let xi = vertices[i][0], yi = vertices[i][1];
-        let xj = vertices[j][0], yj = vertices[j][1];
+        // calculate point perspective
+        let vpi = pointToPerspective(vertices[i]);
+        let vpj = pointToPerspective(vertices[j]);
+
+
+        let xi = vpi[0], yi = vpi[1];
+        let xj = vpj[0], yj = vpj[1];
 
         let intersect = ((yi > y) !== (yj > y)) &&
             (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
