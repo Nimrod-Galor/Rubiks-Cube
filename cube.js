@@ -24,8 +24,7 @@ class Cube{
                 for(let y = 0; y < this.dimantion; y++){
                     let hierarchy = {z: z, x:x, y: y};
                     if(z === 0){// back face
-                        let normal = createVector(0, 0, -1);
-                        let f = new Face(normal, 3, hierarchy);
+                        let f = new Face('back', 3, hierarchy);
                         let mx = x * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = -R - this.cubieSize * 0.5;
@@ -34,8 +33,7 @@ class Cube{
                     }
                     
                     if(z === this.dimantion - 1){ // front face
-                        let normal = createVector(0, 0, 1);
-                        let f = new Face(normal, 1, hierarchy);
+                        let f = new Face('front', 1, hierarchy);
                         let mx = x * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = R + this.cubieSize * 0.5;
@@ -44,8 +42,7 @@ class Cube{
                     }
 
                     if(y === 0){ // top face
-                        let normal = createVector(0, 1, 0);
-                        let f = new Face(normal, 0, hierarchy);
+                        let f = new Face('top', 0, hierarchy);
                         let mx = x * this.cubieSize - R;
                         let my = z * this.cubieSize - R;
                         let mz = R + this.cubieSize * 0.5;
@@ -55,8 +52,7 @@ class Cube{
                     }
 
                     if(y === this.dimantion - 1){ // bottom face
-                        let normal = createVector(0, -1, 0);
-                        let f = new Face(normal, 5, hierarchy);
+                        let f = new Face('bottom', 5, hierarchy);
                         let mx = x * this.cubieSize - R;
                         let my = z * this.cubieSize - R;
                         let mz = -R - this.cubieSize * 0.5;
@@ -66,8 +62,7 @@ class Cube{
                     }
 
                     if(z === 0){ // left face
-                        let normal = createVector(-1, 0, 0);
-                        let f = new Face(normal, 4, hierarchy);
+                        let f = new Face('left', 4, hierarchy);
                         let mx = x * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = -R - this.cubieSize * 0.5;
@@ -77,8 +72,7 @@ class Cube{
                     }
 
                     if(z ===  this.dimantion - 1){ // right face
-                        let normal = createVector(1, 0, 0);
-                        let f = new Face(normal, 2, hierarchy);
+                        let f = new Face('right', 2, hierarchy);
                         let mx = x * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = R + this.cubieSize * 0.5;

@@ -1,6 +1,6 @@
 class Face{
-    constructor(normal, colorIndex, hierarchy){
-        this.normal = normal;
+    constructor(type, colorIndex, hierarchy){
+        this.type = type;
         this.colorIndex = colorIndex;
         this.hierarchy = hierarchy;
         this.vertices = [
