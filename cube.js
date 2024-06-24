@@ -9,7 +9,8 @@ class Cube{
             color(0, 0, 255), // 2 right blue
             color(255, 150, 0), // 3 back orange
             color(0, 255, 0), // 4 left green
-            color(255, 255, 0) // 5 bottom yellow
+            color(255, 255, 0), // 5 bottom yellow
+            color(51) // test
         ];
         this.orientation = [
             {faceId : 'back', normal: [0, 0, -1], isVisible : false},
@@ -20,6 +21,7 @@ class Cube{
             {faceId : 'left', normal: [-1, 0, 0], isVisible : false},
         ];
         this.cubeRotate = false;
+        this.planeCut = [];
     }
 
     initFaces(){
@@ -70,9 +72,9 @@ class Cube{
                         this.faces.push(f);
                     }
 
-                    if(z === 0){ // left face
+                    if(x === 0){ // left face
                         let f = new Face('left', 4, hierarchy);
-                        let mx = x * this.cubieSize - R;
+                        let mx = z * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = -R - this.cubieSize * 0.5;
                         f.moveFace(mx, my, mz);
@@ -80,9 +82,9 @@ class Cube{
                         this.faces.push(f);
                     }
 
-                    if(z ===  this.dimantion - 1){ // right face
+                    if(x ===  this.dimantion - 1){ // right face
                         let f = new Face('right', 2, hierarchy);
-                        let mx = x * this.cubieSize - R;
+                        let mx = z * this.cubieSize - R;
                         let my = y * this.cubieSize - R;
                         let mz = R + this.cubieSize * 0.5;
                         f.moveFace(mx, my, mz);
@@ -131,6 +133,7 @@ class Cube{
         for(let i = 0; i < this.faces.length; i++){
             if(this.faces[i].isVisible && isPointInPolygon(x, y, this.faces[i].vertices)){
                 // click was inside face
+                cube.selectedFaceId = i;
                 return true;
             }
         }
