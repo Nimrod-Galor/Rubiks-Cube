@@ -56,10 +56,10 @@ class Cube{
                     if(y === 0){ // top face
                         let f = new Face('top', 0, hierarchy);
                         let mx = x * this.cubieSize - R;
-                        let my = z * this.cubieSize - R;
-                        let mz = R + this.cubieSize * 0.5;
-                        f.moveFace(mx, my, mz);
+                        let my = -R - this.cubieSize * 0.5;
+                        let mz = z * this.cubieSize - R;
                         f.rotateFace(90, 0, 0);
+                        f.moveFace(mx, my, mz);
 
                         // reorder vertices
                         // f.vertices.push(f.vertices.shift());
@@ -70,10 +70,10 @@ class Cube{
                     if(y === this.dimantion - 1){ // bottom face
                         let f = new Face('bottom', 5, hierarchy);
                         let mx = x * this.cubieSize - R;
-                        let my = z * this.cubieSize - R;
-                        let mz = -R - this.cubieSize * 0.5;
-                        f.moveFace(mx, my, mz);
+                        let my = R + this.cubieSize * 0.5;
+                        let mz = z * this.cubieSize - R;
                         f.rotateFace(90, 0, 0);
+                        f.moveFace(mx, my, mz);
 
                         // reorder vertices
                         // f.vertices.unshift(f.vertices.pop());
@@ -83,21 +83,21 @@ class Cube{
 
                     if(x === 0){ // left face
                         let f = new Face('left', 4, hierarchy);
-                        let mx = z * this.cubieSize - R;
+                        let mx = -R - this.cubieSize * 0.5;
                         let my = y * this.cubieSize - R;
-                        let mz = -R - this.cubieSize * 0.5;
-                        f.moveFace(mx, my, mz);
+                        let mz = z * this.cubieSize - R;
                         f.rotateFace(0, 90, 0);
+                        f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
 
                     if(x ===  this.dimantion - 1){ // right face
                         let f = new Face('right', 2, hierarchy);
-                        let mx = z * this.cubieSize - R;
+                        let mx = R + this.cubieSize * 0.5;
                         let my = y * this.cubieSize - R;
-                        let mz = R + this.cubieSize * 0.5;
-                        f.moveFace(mx, my, mz);
+                        let mz = z * this.cubieSize - R;
                         f.rotateFace(0, 90, 0);
+                        f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
                 }
@@ -107,9 +107,9 @@ class Cube{
 
     render(){
         for(let i = 0 ; i < this.faces.length; i++){
-            if(this.faces[i].isVisible){
+            //if(this.faces[i].isVisible){
                 this.faces[i].render();
-            }
+            //}
         }
     }
 

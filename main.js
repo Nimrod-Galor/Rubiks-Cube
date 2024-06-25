@@ -212,22 +212,34 @@ function mouseDragged() {
                             break;
                             case 'top':
                             case 'bottom':
-
+                                if(i === 0){// top
+                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.x === cube.faces[cube.selectedFaceId].hierarchy.x);
+                                    console.log("top");
+                                }else if(i === 1){//left
+                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.z === cube.faces[cube.selectedFaceId].hierarchy.z);
+                                    console.log("left");
+                                }else if(i === 2){// bottom
+                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.x === cube.faces[cube.selectedFaceId].hierarchy.x);
+                                    console.log("bottom");
+                                }else{// right
+                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.z === cube.faces[cube.selectedFaceId].hierarchy.z);
+                                    console.log("right");
+                                }
                             break;
                             case 'left':
                             case 'right':
                                 if(i === 0){// top
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.z === cube.faces[cube.selectedFaceId].hierarchy.z);
                                     console.log("top");
-                                }else if(i === 1){//right
+                                }else if(i === 1){//left
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.y === cube.faces[cube.selectedFaceId].hierarchy.y);
-                                    console.log("right");
+                                    console.log("left");
                                 }else if(i === 2){// bottom
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.z === cube.faces[cube.selectedFaceId].hierarchy.z);
                                     console.log("bottom");
-                                }else{// left
+                                }else{// right
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.y === cube.faces[cube.selectedFaceId].hierarchy.y);
-                                    console.log("left");
+                                    console.log("right");
                                 }
                             break;
                         }
