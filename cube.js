@@ -13,13 +13,14 @@ class Cube{
             color(51) // test
         ];
         this.orientation = [
-            {faceId : 'back', normal: [0, 0, -1], isVisible : false},
-            {faceId : 'front', normal: [0, 0, 1], isVisible : false},
-            {faceId : 'top', normal: [0, -1, 0], isVisible : false},
-            {faceId : 'bottom', normal: [0, 1, 0], isVisible : false},
-            {faceId : 'right', normal: [1, 0, 0], isVisible : false},
-            {faceId : 'left', normal: [-1, 0, 0], isVisible : false},
+            {faceId : 'back', normal: [0, 0, -150], isVisible : false},
+            {faceId : 'front', normal: [0, 0, 150], isVisible : false},
+            {faceId : 'top', normal: [0, -150, 0], isVisible : false},
+            {faceId : 'bottom', normal: [0, 150, 0], isVisible : false},
+            {faceId : 'right', normal: [150, 0, 0], isVisible : false},
+            {faceId : 'left', normal: [-150, 0, 0], isVisible : false},
         ];
+        // this.vectorX = createVector(0, 600, 150);// track bube rotation o
         this.cubeRotate = false;
         this.planeCut = [];
     }
@@ -59,6 +60,10 @@ class Cube{
                         let mz = R + this.cubieSize * 0.5;
                         f.moveFace(mx, my, mz);
                         f.rotateFace(90, 0, 0);
+
+                        // reorder vertices
+                        // f.vertices.push(f.vertices.shift());
+
                         this.faces.push(f);
                     }
 
@@ -69,6 +74,10 @@ class Cube{
                         let mz = -R - this.cubieSize * 0.5;
                         f.moveFace(mx, my, mz);
                         f.rotateFace(90, 0, 0);
+
+                        // reorder vertices
+                        // f.vertices.unshift(f.vertices.pop());
+
                         this.faces.push(f);
                     }
 
@@ -106,18 +115,17 @@ class Cube{
 
     rotateCube(x, y, z){
         // update face orientation normal
+        let thetaX = radians(x);
+        let thetaY = radians(y);
+        let thetaZ = radians(z);
+        
+        // Rotation matrices
+        let Rx = rotationMatrixX(thetaX);
+        let Ry = rotationMatrixY(thetaY);
+        let Rz = rotationMatrixZ(thetaZ);
+        // Combined rotation matrix Rz * Ry * Rx
+        var R = multiplyMatrices(multiplyMatrices(Rz, Ry), Rx);
         for(let i = 0; i < this.orientation.length; i++){
-            let thetaX = radians(x);
-            let thetaY = radians(y);
-            let thetaZ = radians(z);
-            
-            // Rotation matrices
-            let Rx = rotationMatrixX(thetaX);
-            let Ry = rotationMatrixY(thetaY);
-            let Rz = rotationMatrixZ(thetaZ);
-            // Combined rotation matrix Rz * Ry * Rx
-            let R = multiplyMatrices(multiplyMatrices(Rz, Ry), Rx);
-            
             this.orientation[i].normal = rotatePoint(this.orientation[i].normal, R);
             
             cube.orientation[i].isVisible = isTriangleFacingCamera(cube.orientation[i].normal);

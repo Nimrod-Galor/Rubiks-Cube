@@ -40,9 +40,9 @@ class Face{
     render(){
         push();
         fill(cube.colors[this.colorIndex]);
+        //noFill();
         strokeWeight(4);
         beginShape();
-
         for(let i = 0 ; i < this.vertices.length; i++){
             // calculate point perspective
             let vp = pointToPerspective(this.vertices[i]);
@@ -112,10 +112,17 @@ function rotatePoint(point, rotationMatrix) {
 }
 const fov = 800;
 
+function vectorToPerspective(vec){
+    const scale = fov / (fov - vec.z);
+    vec.x *= scale;
+    vec.y *= scale;
+    return vec;
+}
+
 function pointToPerspective(point){
     const scale = fov / (fov - point[2]);
-    let px = point[0] * scale;// * width / 2 + width / 2;
-    let py = point[1] * scale;// * height / 2 + height / 2;
+    let px = point[0] * scale;
+    let py = point[1] * scale;
     return [px, py, point[2]];
 }
 
