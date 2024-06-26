@@ -107,9 +107,9 @@ class Cube{
 
     render(){
         for(let i = 0 ; i < this.faces.length; i++){
-            //if(this.faces[i].isVisible){
+            if(this.faces[i].isVisible){
                 this.faces[i].render();
-            //}
+            }
         }
     }
 
