@@ -6,6 +6,8 @@ const rotationSpeed = 0.05;
 var mouseStartX = 0;
 var mouseStartY = 0;
 
+const cutPlaneRotationSpeed = 0.02;
+
 function setup() {
     createCanvas(800, 800, WEBGL);
 
@@ -38,7 +40,7 @@ function mousePressed(){
 function mouseReleased(){
     cube.cubeRotate = false;
   //  cube.selectedFaceId = -1;
-    cube.planeCut = [];
+    //cube.planeCut = [];
     mouseStartX = 0;
     mouseStartY = 0;
 }
@@ -84,6 +86,10 @@ function mouseDragged() {
                             case 'back':
                                 if(i === 0){// top
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
+
+                                    cube.planeCutRotationAxis.x = cube.orientation[5].normal[0] * - cutPlaneRotationSpeed;
+                                    cube.planeCutRotationAxis.y = cube.orientation[5].normal[1] * - cutPlaneRotationSpeed;
+                                    cube.planeCutRotationAxis.z = cube.orientation[5].normal[2] * - cutPlaneRotationSpeed;
                                     console.log("top");
                                 }else if(i === 1){//right
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
@@ -96,7 +102,7 @@ function mouseDragged() {
                                     console.log("left");
                                 }
                             break;
-                            case 'top':
+                            case 'top': // rotation on X and Z
                             case 'bottom':
                                 if(i === 0){// top
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
@@ -112,7 +118,7 @@ function mouseDragged() {
                                     console.log("right");
                                 }
                             break;
-                            case 'left':
+                            case 'left':// rotation on Z and Y
                             case 'right':
                                 if(i === 0){// top
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
@@ -135,7 +141,7 @@ function mouseDragged() {
 
 
                 for(let i = 0; i < cube.planeCut.length; i++){
-                    cube.planeCut[i].colorIndex = 6;
+                    cube.planeCut[i].isVisible = true;
                 }
             }
         }

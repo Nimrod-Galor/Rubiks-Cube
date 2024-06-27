@@ -20,9 +20,10 @@ class Cube{
             {faceId : 'right', normal: [150, 0, 0], isVisible : false},
             {faceId : 'left', normal: [-150, 0, 0], isVisible : false},
         ];
-        // this.vectorX = createVector(0, 600, 150);// track bube rotation o
+        
         this.cubeRotate = false;
         this.planeCut = [];
+        this.planeCutRotationAxis = createVector(0, 0, 0);
     }
 
     initFaces(){
@@ -106,6 +107,11 @@ class Cube{
     }
 
     render(){
+        // rotate cut plane
+        for(let i = 0; i < cube.planeCut.length; i++){
+            cube.planeCut[i].rotateFace(this.planeCutRotationAxis.x, this.planeCutRotationAxis.y, this.planeCutRotationAxis.z);
+        }
+
         for(let i = 0 ; i < this.faces.length; i++){
             if(this.faces[i].isVisible){
                 this.faces[i].render();
