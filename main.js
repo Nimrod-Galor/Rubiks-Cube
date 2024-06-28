@@ -1,6 +1,7 @@
 var cam;
 var cube;
 var cameraPosition;
+const camFov = 800;
 const rotationSpeed = 0.05;
 
 var mouseStartX = 0;
@@ -12,7 +13,7 @@ function setup() {
     createCanvas(800, 800, WEBGL);
 
     cam = createCamera();
-    cam.setPosition(0, 0, 800);
+    cam.setPosition(0, 0, camFov);
     ortho();
     cameraPosition = createVector(0, 0, -1);
 
@@ -58,6 +59,7 @@ function mouseDragged() {
         test = [];
         cube.rotateCube(x * rotationSpeed, y * -rotationSpeed, 0);
     }else{// rotate plane
+        cube.cutRotate = true;
         if(cube.planeCut.length === 0){
             let x = mouseStartX -  mouseX;
             let y = mouseStartY - mouseY;
@@ -87,9 +89,10 @@ function mouseDragged() {
                                 if(i === 0){// top
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
 
-                                    cube.planeCutRotationAxis.x = cube.orientation[5].normal[0] * - cutPlaneRotationSpeed;
-                                    cube.planeCutRotationAxis.y = cube.orientation[5].normal[1] * - cutPlaneRotationSpeed;
-                                    cube.planeCutRotationAxis.z = cube.orientation[5].normal[2] * - cutPlaneRotationSpeed;
+                                    cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? -1 : 1;
+
+                                    cube.planeCutRotationAxis = cube.orientation[5].normal;
+
                                     console.log("top");
                                 }else if(i === 1){//right
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
@@ -140,9 +143,9 @@ function mouseDragged() {
                 }
 
 
-                for(let i = 0; i < cube.planeCut.length; i++){
-                    cube.planeCut[i].isVisible = true;
-                }
+                // for(let i = 0; i < cube.planeCut.length; i++){
+                //     cube.planeCut[i].isVisible = true;
+                // }
             }
         }
     }
@@ -208,4 +211,111 @@ function extendVector(p1, p2) {
         x: p1.x + directionX * largeValue,
         y: p1.y + directionY * largeValue
     };
+}
+
+// Function to calculate the angle between two vectors
+function angleBetweenVectors(v1, v2) {
+    // v1.normalize();
+    // v2.normalize();
+    // Calculate the dot product of v1 and v2
+    const dotProduct = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+
+    // Calculate the magnitudes of v1 and v2
+    const magnitudeV1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+    const magnitudeV2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
+
+    // Calculate the cosine of the angle
+    const cosTheta = dotProduct / (magnitudeV1 * magnitudeV2);
+
+    // Use Math.acos to get the angle in radians
+    const angleInRadians = Math.acos(cosTheta);
+
+    // Convert the angle from radians to degrees
+    const angleInDegrees = angleInRadians * (180 / Math.PI);
+
+    return angleInDegrees;
+}
+
+
+
+p5.Vector.prototype.vectorToPerspective = function(){
+    const scale = camFov / (camFov - this.z);
+    const x = this.x * scale;
+    const y = this.y * scale;
+    const res = {x: x, y: y, z: this.z};
+    return res;
+}
+
+// Function to rotate a point using a rotation matrix
+p5.Vector.prototype.pointRotate = function(rotationMatrix) {
+    let point = [this.x, this.y, this.z];
+    let result = [];
+    for (let i = 0; i < rotationMatrix.length; i++) {
+        result[i] = 0;
+        for (let j = 0; j < point.length; j++) {
+            result[i] += rotationMatrix[i][j] * point[j];
+        }
+    }
+    
+    this.x = result[0];
+    this.y = result[1];
+    this.z = result[2];
+}
+
+// Function to create a rotation matrix for the x-axis
+function rotationMatrixX(theta) {
+    return [
+        [1, 0, 0],
+        [0, Math.cos(theta), -Math.sin(theta)],
+        [0, Math.sin(theta), Math.cos(theta)]
+    ];
+}
+
+// Function to create a rotation matrix for the y-axis
+function rotationMatrixY(theta) {
+    return [
+        [Math.cos(theta), 0, Math.sin(theta)],
+        [0, 1, 0],
+        [-Math.sin(theta), 0, Math.cos(theta)]
+    ];
+}
+
+// Function to create a rotation matrix for the z-axis
+function rotationMatrixZ(theta) {
+    return [
+        [Math.cos(theta), -Math.sin(theta), 0],
+        [Math.sin(theta), Math.cos(theta), 0],
+        [0, 0, 1]
+    ];
+}
+
+
+// create rotation matrix
+function getRotationMatrix(xAngle, yAngle, zAngle){
+    let thetaX = radians(xAngle);
+    let thetaY = radians(yAngle);
+    let thetaZ = radians(zAngle);
+
+    // Rotation matrices
+    let Rx = rotationMatrixX(thetaX);
+    let Ry = rotationMatrixY(thetaY);
+    let Rz = rotationMatrixZ(thetaZ);
+    // Combined rotation matrix Rz * Ry * Rx
+    let R = multiplyMatrices(multiplyMatrices(Rz, Ry), Rx);
+    return R;
+}
+
+// Function to multiply two matrices
+function multiplyMatrices(a, b) {
+    let result = [];
+    for (let i = 0; i < a.length; i++) {
+        result[i] = [];
+        for (let j = 0; j < b[0].length; j++) {
+            result[i][j] = 0;
+            for (let k = 0; k < a[0].length; k++) {
+                result[i][j] += a[i][k] * b[k][j];
+            }
+        }
+    }
+    return result;
 }

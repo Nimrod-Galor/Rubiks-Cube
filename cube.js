@@ -13,17 +13,20 @@ class Cube{
             color(51) // test
         ];
         this.orientation = [
-            {faceId : 'back', normal: [0, 0, -150], isVisible : false},
-            {faceId : 'front', normal: [0, 0, 150], isVisible : false},
-            {faceId : 'top', normal: [0, -150, 0], isVisible : false},
-            {faceId : 'bottom', normal: [0, 150, 0], isVisible : false},
-            {faceId : 'right', normal: [150, 0, 0], isVisible : false},
-            {faceId : 'left', normal: [-150, 0, 0], isVisible : false},
+            {faceId : 'back', normal: createVector(0, 0, -1), isVisible : false},
+            {faceId : 'front', normal: createVector(0, 0, 1), isVisible : false},
+            {faceId : 'top', normal: createVector(0, -1, 0), isVisible : false},
+            {faceId : 'bottom', normal: createVector(0, 1, 0), isVisible : false},
+            {faceId : 'right', normal: createVector(1, 0, 0), isVisible : false},
+            {faceId : 'left', normal: createVector(-1, 0, 0), isVisible : false},
         ];
         
         this.cubeRotate = false;
+        this.cutRotate = false;
         this.planeCut = [];
         this.planeCutRotationAxis = createVector(0, 0, 0);
+        this.planeCutRotaionMagnitude = radians(5);
+        this.planeCutRotaionDone = 0;
     }
 
     initFaces(){
@@ -31,72 +34,79 @@ class Cube{
         camera(0, 0, Math.min(this.dimantion * 250, 6000));
 
         //initiate cube
-        let R = this.dimantion * 0.5  * this.cubieSize - (this.cubieSize * 0.5);
+        let R = this.dimantion * this.cubieSize * 0.5;
         for(let z = 0; z < this.dimantion; z++){
             for(let x = 0; x < this.dimantion; x++){
                 for(let y = 0; y < this.dimantion; y++){
                     let hierarchy = {z: z, x:x, y: y};
                     if(z === 0){// back face
+                        //let normal = createVector(0, 0, -1);
+                        //let f = new Face('back', normal, 3, hierarchy);
                         let f = new Face('back', 3, hierarchy);
-                        let mx = x * this.cubieSize - R;
-                        let my = y * this.cubieSize - R;
-                        let mz = -R - this.cubieSize * 0.5;
+                        f.normal.z = -1
+                        let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let mz = R * -1;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
                     
                     if(z === this.dimantion - 1){ // front face
+                        //let normal = createVector(0, 0, 1);
+                        //let f = new Face('front', normal, 1, hierarchy);
                         let f = new Face('front', 1, hierarchy);
-                        let mx = x * this.cubieSize - R;
-                        let my = y * this.cubieSize - R;
-                        let mz = R + this.cubieSize * 0.5;
+                        let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let mz = R;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
 
                     if(y === 0){ // top face
+                        //let normal = createVector(0, 1, 0);
+                        //let f = new Face('top', normal, 0, hierarchy);
                         let f = new Face('top', 0, hierarchy);
-                        let mx = x * this.cubieSize - R;
-                        let my = -R - this.cubieSize * 0.5;
-                        let mz = z * this.cubieSize - R;
+                        let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let my = (-R - this.cubieSize * 0.5) + (this.cubieSize * 0.5);
+                        let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
                         f.rotateFace(90, 0, 0);
                         f.moveFace(mx, my, mz);
-
-                        // reorder vertices
-                        // f.vertices.push(f.vertices.shift());
-
                         this.faces.push(f);
                     }
 
                     if(y === this.dimantion - 1){ // bottom face
+                        //let normal = createVector(0, -1, 0);
+                        //let f = new Face('bottom', normal, 5, hierarchy);
                         let f = new Face('bottom', 5, hierarchy);
-                        let mx = x * this.cubieSize - R;
-                        let my = R + this.cubieSize * 0.5;
-                        let mz = z * this.cubieSize - R;
+                        let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let my = (R + this.cubieSize * 0.5) - (this.cubieSize * 0.5);
+                        let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
                         f.rotateFace(90, 0, 0);
+                        f.normal.y = 1;
                         f.moveFace(mx, my, mz);
-
-                        // reorder vertices
-                        // f.vertices.unshift(f.vertices.pop());
-
                         this.faces.push(f);
                     }
 
                     if(x === 0){ // left face
+                        //let normal = createVector(-1, 0, 0);
+                        //let f = new Face('left', normal, 4, hierarchy);
                         let f = new Face('left', 4, hierarchy);
-                        let mx = -R - this.cubieSize * 0.5;
-                        let my = y * this.cubieSize - R;
-                        let mz = z * this.cubieSize - R;
+                        let mx = (-R - this.cubieSize * 0.5) + (this.cubieSize * 0.5);
+                        let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
                         f.rotateFace(0, 90, 0);
+                        f.normal.x = -1;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
 
                     if(x ===  this.dimantion - 1){ // right face
+                        //let normal = createVector(1, 0, 0);
+                        //let f = new Face('right', normal, 2, hierarchy);
                         let f = new Face('right', 2, hierarchy);
-                        let mx = R + this.cubieSize * 0.5;
-                        let my = y * this.cubieSize - R;
-                        let mz = z * this.cubieSize - R;
+                        let mx = (R + this.cubieSize * 0.5) - (this.cubieSize * 0.5);
+                        let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
                         f.rotateFace(0, 90, 0);
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
@@ -107,10 +117,23 @@ class Cube{
     }
 
     render(){
-        // rotate cut plane
-        for(let i = 0; i < cube.planeCut.length; i++){
-            cube.planeCut[i].rotateFace(this.planeCutRotationAxis.x, this.planeCutRotationAxis.y, this.planeCutRotationAxis.z);
-        }
+        // if(this.planeCut.length > 0){
+        //     this.rotateCutPlane(this.planeCutRotaionMagnitude);
+        //     this.planeCutRotaionDone += this.planeCutRotaionMagnitude;
+        //     console.log(degrees(this.planeCutRotaionDone));
+            
+
+        //     if(Math.abs(degrees(this.planeCutRotaionDone)) >= 89){
+        //         console.log("IN");
+
+        //         // roatae back 90 degrees
+        //         this.rotateCutPlane(this.planeCutRotaionDone * -1);
+        //         this.planeCut = [];
+        //         cube.cutRotate = false;
+        //         this.planeCutRotaionDone = 0
+        //     }
+            
+        // }
 
         for(let i = 0 ; i < this.faces.length; i++){
             if(this.faces[i].isVisible){
@@ -120,37 +143,65 @@ class Cube{
     }
 
     rotateCube(x, y, z){
-        // update face orientation normal
-        let thetaX = radians(x);
-        let thetaY = radians(y);
-        let thetaZ = radians(z);
-        
-        // Rotation matrices
-        let Rx = rotationMatrixX(thetaX);
-        let Ry = rotationMatrixY(thetaY);
-        let Rz = rotationMatrixZ(thetaZ);
-        // Combined rotation matrix Rz * Ry * Rx
-        var R = multiplyMatrices(multiplyMatrices(Rz, Ry), Rx);
+        //let R = getRotationMatrix(x, y, z);
         for(let i = 0; i < this.orientation.length; i++){
-            this.orientation[i].normal = rotatePoint(this.orientation[i].normal, R);
-            
-            cube.orientation[i].isVisible = isTriangleFacingCamera(cube.orientation[i].normal);
+            this.orientation[i].normal.pointRotate(x, y, z);
+            //this.orientation[i].isVisible = isTriangleFacingCamera(this.orientation[i].normal);
         }
         
         for(let i = 0 ; i < this.faces.length; i++){
             this.faces[i].rotateFace(x, y, z);
-            this.faces[i].isVisible = cube.orientation[cube.orientation.findIndex(item => item.faceId === this.faces[i].type)].isVisible;
+            //this.faces[i].isVisible = this.faces[i].isFacingCamers();
         }
     }
+
+    rotateCutPlane(angleRadian){
+        for(let i = 0; i < this.planeCut.length; i++){
+            //loop points in vertice (face)
+            for(let pi = 0 ; pi < this.planeCut[i].vertices.length; pi ++){
+                this.planeCut[i].vertices[pi] = rotatePointAroundVector(this.planeCut[i].vertices[pi], this.planeCutRotationAxis, angleRadian);
+            }
+        }
+    }
+
 
     faceClicked(x, y){
         for(let i = 0; i < this.faces.length; i++){
             if(this.faces[i].isVisible && isPointInPolygon(x, y, this.faces[i].vertices)){
                 // click was inside face
-                cube.selectedFaceId = i;
+                this.selectedFaceId = i;
                 return true;
             }
         }
         return false;
     }
+}
+
+
+// Function to rotate a point around a given axis
+function rotatePointAroundVector(point, axis, theta) {
+    // Normalize the axis vector
+    let axisLength = Math.sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2]);
+    let k = [axis[0] / axisLength, axis[1] / axisLength, axis[2] / axisLength];
+
+    // Calculate the dot product of k and point
+    let dotProduct = k[0] * point[0] + k[1] * point[1] + k[2] * point[2];
+
+    // Calculate the cross product of k and point
+    let crossProduct = [
+        k[1] * point[2] - k[2] * point[1],
+        k[2] * point[0] - k[0] * point[2],
+        k[0] * point[1] - k[1] * point[0]
+    ];
+
+    // Calculate the rotated point
+    let cosTheta = Math.cos(theta);
+    let sinTheta = Math.sin(theta);
+    let rotatedPoint = [
+        point[0] * cosTheta + crossProduct[0] * sinTheta + k[0] * dotProduct * (1 - cosTheta),
+        point[1] * cosTheta + crossProduct[1] * sinTheta + k[1] * dotProduct * (1 - cosTheta),
+        point[2] * cosTheta + crossProduct[2] * sinTheta + k[2] * dotProduct * (1 - cosTheta)
+    ];
+
+    return rotatedPoint;
 }
