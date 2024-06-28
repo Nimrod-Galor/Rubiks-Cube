@@ -30,9 +30,6 @@ class Cube{
     }
 
     initFaces(){
-        // SET CAMERA DISTANCE
-        camera(0, 0, Math.min(this.dimantion * 250, 6000));
-
         //initiate cube
         let R = this.dimantion * this.cubieSize * 0.5;
         for(let z = 0; z < this.dimantion; z++){

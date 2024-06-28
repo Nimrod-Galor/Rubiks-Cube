@@ -1,7 +1,9 @@
 var cam;
 var cube;
 var cameraPosition;
-const camFov = 800;
+var camFov = 800;
+var dimantion = 13;
+var cubieSize = 100;
 const rotationSpeed = 0.05;
 
 var mouseStartX = 0;
@@ -15,9 +17,11 @@ function setup() {
     cam = createCamera();
     cam.setPosition(0, 0, camFov);
     ortho();
+    // SET CAMERA DISTANCE
+    camera(0, 0, Math.min(dimantion * 250, 6000));
     cameraPosition = createVector(0, 0, -1);
 
-    cube = new Cube(3, 100); //dimantion, cubieSize
+    cube = new Cube(dimantion, cubieSize); //dimantion, cubieSize
     cube.initFaces();
 
     cube.rotateCube(-45, 45, -35);
@@ -79,8 +83,8 @@ function mouseDragged() {
                 let faceHierarchy = cube.faces[cube.selectedFaceId].hierarchy;
                 for(let i = 0 ; i < vertices.length; i++){
                     // set face line points
-                    l1 = pointToVector(vertices[i]);
-                    l2 = pointToVector(vertices[(i + 1) % vertices.length]);
+                    l1 = vertices[i];
+                    l2 = vertices[(i + 1) % vertices.length];
                     // check if mouse vector intersect face line
                     if(doLinesIntersect(p1, extendedP2, l1, l2)){
                         switch(selectedFace.type){
@@ -151,17 +155,17 @@ function mouseDragged() {
     }
 }
 
-function pointToVector(point){
-    return createVector(point[0], point[1], point[2]);
-}
+// function pointToVector(point){
+//     return createVector(point[0], point[1], point[2]);
+// }
 
-function getVectorOfPOints(p1, p2){
-    let vecX = p1[0] - p2[0];
-    let vecY = p1[1] - p2[1];
-    let vecZ = p1[2] - p2[2];
+// function getVectorOfPOints(p1, p2){
+//     let vecX = p1[0] - p2[0];
+//     let vecY = p1[1] - p2[1];
+//     let vecZ = p1[2] - p2[2];
 
-    return createVector(vecX, vecY, vecZ);
-}
+//     return createVector(vecX, vecY, vecZ);
+// }
 
 // Function to check if two lines intersect
 function doLinesIntersect(p1, p2, l1, l2) {
@@ -214,27 +218,27 @@ function extendVector(p1, p2) {
 }
 
 // Function to calculate the angle between two vectors
-function angleBetweenVectors(v1, v2) {
-    // v1.normalize();
-    // v2.normalize();
-    // Calculate the dot product of v1 and v2
-    const dotProduct = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+// function angleBetweenVectors(v1, v2) {
+//     // v1.normalize();
+//     // v2.normalize();
+//     // Calculate the dot product of v1 and v2
+//     const dotProduct = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 
-    // Calculate the magnitudes of v1 and v2
-    const magnitudeV1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
-    const magnitudeV2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
+//     // Calculate the magnitudes of v1 and v2
+//     const magnitudeV1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+//     const magnitudeV2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
 
-    // Calculate the cosine of the angle
-    const cosTheta = dotProduct / (magnitudeV1 * magnitudeV2);
+//     // Calculate the cosine of the angle
+//     const cosTheta = dotProduct / (magnitudeV1 * magnitudeV2);
 
-    // Use Math.acos to get the angle in radians
-    const angleInRadians = Math.acos(cosTheta);
+//     // Use Math.acos to get the angle in radians
+//     const angleInRadians = Math.acos(cosTheta);
 
-    // Convert the angle from radians to degrees
-    const angleInDegrees = angleInRadians * (180 / Math.PI);
+//     // Convert the angle from radians to degrees
+//     const angleInDegrees = angleInRadians * (180 / Math.PI);
 
-    return angleInDegrees;
-}
+//     return angleInDegrees;
+// }
 
 
 
