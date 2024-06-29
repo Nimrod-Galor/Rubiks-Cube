@@ -252,26 +252,35 @@ function extendVector(p1, p2) {
 // Function to rotate a point around a given axis
 p5.Vector.prototype.rotatePointAroundVector = function(axis, theta) {
         // Normalize the axis vector
-    let axisLength = Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
-    let k = [axis.x / axisLength, axis.y / axisLength, axis.z / axisLength];
+    // let axisLength = Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
+    //let axisLength = axis.magSq();
+    // let k = [axis.x / axisLength, axis.y / axisLength, axis.z / axisLength];
+    axis.normalize();
 
     // Calculate the dot product of k and point
-    let dotProduct = k[0] * this.x + k[1] * this.y + k[2] * this.z;
+    //let dotProduct = k[0] * this.x + k[1] * this.y + k[2] * this.z;
+    let dotProduct = this.dot(axis);
 
     // Calculate the cross product of k and point
-    let crossProduct = [
-        k[1] * this.z - k[2] * this.y,
-        k[2] * this.x - k[0] * this.z,
-        k[0] * this.y - k[1] * this.x
-    ];
+    // let crossProduct = [
+    //     k[1] * this.z - k[2] * this.y,
+    //     k[2] * this.x - k[0] * this.z,
+    //     k[0] * this.y - k[1] * this.x
+    // ];
+    let crossProduct = this.cross(axis);
+
 
     // Calculate the rotated point
     let cosTheta = Math.cos(theta);
     let sinTheta = Math.sin(theta);
     
-    this.x = this.x * cosTheta + crossProduct[0] * sinTheta + k[0] * dotProduct * (1 - cosTheta);
-    this.y = this.y * cosTheta + crossProduct[1] * sinTheta + k[1] * dotProduct * (1 - cosTheta);
-    this.z = this.z * cosTheta + crossProduct[2] * sinTheta + k[2] * dotProduct * (1 - cosTheta);
+    // this.x = this.x * cosTheta + crossProduct[0] * sinTheta + k[0] * dotProduct * (1 - cosTheta);
+    // this.y = this.y * cosTheta + crossProduct[1] * sinTheta + k[1] * dotProduct * (1 - cosTheta);
+    // this.z = this.z * cosTheta + crossProduct[2] * sinTheta + k[2] * dotProduct * (1 - cosTheta);
+
+    this.x = this.x * cosTheta + crossProduct.x * sinTheta + axis.x * dotProduct * (1 - cosTheta);
+    this.y = this.y * cosTheta + crossProduct.y * sinTheta + axis.y * dotProduct * (1 - cosTheta);
+    this.z = this.z * cosTheta + crossProduct.z * sinTheta + axis.z * dotProduct * (1 - cosTheta);
     
 }
 
