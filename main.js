@@ -68,7 +68,7 @@ function mouseDragged() {
 
     if(cube.cubeRotate){// rotate the cube
         test = [];
-        cube.rotateCube(x * rotationSpeed, y * -rotationSpeed, 0);
+        cube.rotateCube(x * -rotationSpeed, y * -rotationSpeed, 0);
     }else{// rotate plane
         cube.cutRotate = true;
         if(cube.planeCut.length === 0){
