@@ -2,8 +2,8 @@ var cam;
 var cube;
 var cameraPosition;
 var camFov = 800;
-var dimantion = 13;
-var cubieSize = 100;
+var cubeDimantion = 3;
+//var cubieSize = 100;
 const rotationSpeed = 0.05;
 
 var mouseStartX = 0;
@@ -16,12 +16,19 @@ function setup() {
 
     cam = createCamera();
     cam.setPosition(0, 0, camFov);
-    ortho();
-    // SET CAMERA DISTANCE
-    camera(0, 0, Math.min(dimantion * 250, 6000));
+    let left = width * -0.5;
+    let right = width * 0.5;
+    let top = height * -0.5;
+    let bottom = height * 0.5
+    let near = 0;
+    let far = max(width, height) + 8000;
+    ortho(left, right, bottom, top, near, far);
+    
     cameraPosition = createVector(0, 0, -1);
 
-    cube = new Cube(dimantion, cubieSize); //dimantion, cubieSize
+    let cubieSize = 300 / cubeDimantion 
+
+    cube = new Cube(cubeDimantion, cubieSize); //cubeDimantion, cubieSize
     cube.initFaces();
 
     cube.rotateCube(-45, 45, -35);
