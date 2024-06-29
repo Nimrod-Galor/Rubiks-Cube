@@ -114,23 +114,23 @@ class Cube{
     }
 
     render(){
-        // if(this.planeCut.length > 0){
-        //     this.rotateCutPlane(this.planeCutRotaionMagnitude);
-        //     this.planeCutRotaionDone += this.planeCutRotaionMagnitude;
-        //     console.log(degrees(this.planeCutRotaionDone));
+        if(this.planeCut.length > 0){
+            this.rotateCutPlane(this.planeCutRotaionMagnitude);
+            this.planeCutRotaionDone += this.planeCutRotaionMagnitude;
+            console.log(degrees(this.planeCutRotaionDone));
             
 
-        //     if(Math.abs(degrees(this.planeCutRotaionDone)) >= 89){
-        //         console.log("IN");
+            if(Math.abs(degrees(this.planeCutRotaionDone)) >= 89){
+                console.log("IN");
 
-        //         // roatae back 90 degrees
-        //         this.rotateCutPlane(this.planeCutRotaionDone * -1);
-        //         this.planeCut = [];
-        //         cube.cutRotate = false;
-        //         this.planeCutRotaionDone = 0
-        //     }
+                // roatae back 90 degrees
+                this.rotateCutPlane(this.planeCutRotaionDone * -1);
+                this.planeCut = [];
+                cube.cutRotate = false;
+                this.planeCutRotaionDone = 0
+            }
             
-        // }
+        }
 
         for(let i = 0 ; i < this.faces.length; i++){
             if(this.faces[i].isVisible){
@@ -140,9 +140,9 @@ class Cube{
     }
 
     rotateCube(x, y, z){
-        //let R = getRotationMatrix(x, y, z);
+        let rotationMatrix = getRotationMatrix(x, y, z);
         for(let i = 0; i < this.orientation.length; i++){
-            this.orientation[i].normal.pointRotate(x, y, z);
+            this.orientation[i].normal.pointRotate(rotationMatrix);
             //this.orientation[i].isVisible = isTriangleFacingCamera(this.orientation[i].normal);
         }
         
@@ -156,11 +156,10 @@ class Cube{
         for(let i = 0; i < this.planeCut.length; i++){
             //loop points in vertice (face)
             for(let pi = 0 ; pi < this.planeCut[i].vertices.length; pi ++){
-                this.planeCut[i].vertices[pi] = rotatePointAroundVector(this.planeCut[i].vertices[pi], this.planeCutRotationAxis, angleRadian);
+                this.planeCut[i].vertices[pi].rotatePointAroundVector(this.planeCutRotationAxis, angleRadian);
             }
         }
     }
-
 
     faceClicked(x, y){
         for(let i = 0; i < this.faces.length; i++){
@@ -175,30 +174,30 @@ class Cube{
 }
 
 
-// Function to rotate a point around a given axis
-function rotatePointAroundVector(point, axis, theta) {
-    // Normalize the axis vector
-    let axisLength = Math.sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2]);
-    let k = [axis[0] / axisLength, axis[1] / axisLength, axis[2] / axisLength];
+// // Function to rotate a point around a given axis
+// function rotatePointAroundVector(point, axis, theta) {
+//     // Normalize the axis vector
+//     let axisLength = Math.sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2]);
+//     let k = [axis[0] / axisLength, axis[1] / axisLength, axis[2] / axisLength];
 
-    // Calculate the dot product of k and point
-    let dotProduct = k[0] * point[0] + k[1] * point[1] + k[2] * point[2];
+//     // Calculate the dot product of k and point
+//     let dotProduct = k[0] * point[0] + k[1] * point[1] + k[2] * point[2];
 
-    // Calculate the cross product of k and point
-    let crossProduct = [
-        k[1] * point[2] - k[2] * point[1],
-        k[2] * point[0] - k[0] * point[2],
-        k[0] * point[1] - k[1] * point[0]
-    ];
+//     // Calculate the cross product of k and point
+//     let crossProduct = [
+//         k[1] * point[2] - k[2] * point[1],
+//         k[2] * point[0] - k[0] * point[2],
+//         k[0] * point[1] - k[1] * point[0]
+//     ];
 
-    // Calculate the rotated point
-    let cosTheta = Math.cos(theta);
-    let sinTheta = Math.sin(theta);
-    let rotatedPoint = [
-        point[0] * cosTheta + crossProduct[0] * sinTheta + k[0] * dotProduct * (1 - cosTheta),
-        point[1] * cosTheta + crossProduct[1] * sinTheta + k[1] * dotProduct * (1 - cosTheta),
-        point[2] * cosTheta + crossProduct[2] * sinTheta + k[2] * dotProduct * (1 - cosTheta)
-    ];
+//     // Calculate the rotated point
+//     let cosTheta = Math.cos(theta);
+//     let sinTheta = Math.sin(theta);
+//     let rotatedPoint = [
+//         point[0] * cosTheta + crossProduct[0] * sinTheta + k[0] * dotProduct * (1 - cosTheta),
+//         point[1] * cosTheta + crossProduct[1] * sinTheta + k[1] * dotProduct * (1 - cosTheta),
+//         point[2] * cosTheta + crossProduct[2] * sinTheta + k[2] * dotProduct * (1 - cosTheta)
+//     ];
 
-    return rotatedPoint;
-}
+//     return rotatedPoint;
+// }

@@ -16,13 +16,14 @@ function setup() {
 
     cam = createCamera();
     cam.setPosition(0, 0, camFov);
-    let left = width * -0.5;
-    let right = width * 0.5;
-    let top = height * -0.5;
-    let bottom = height * 0.5
-    let near = 0;
-    let far = max(width, height) + 8000;
-    ortho(left, right, bottom, top, near, far);
+    // let left = width * -0.5;
+    // let right = width * 0.5;
+    // let top = height * -0.5;
+    // let bottom = height * 0.5
+    // let near = 0;
+    // let far = max(width, height) + 8000;
+    // ortho(left, right, bottom, top, near, far);
+    ortho();
     
     cameraPosition = createVector(0, 0, -1);
 
@@ -68,7 +69,7 @@ function mouseDragged() {
 
     if(cube.cubeRotate){// rotate the cube
         test = [];
-        cube.rotateCube(x * -rotationSpeed, y * -rotationSpeed, 0);
+        cube.rotateCube(x * rotationSpeed, y * -rotationSpeed, 0);
     }else{// rotate plane
         cube.cutRotate = true;
         if(cube.planeCut.length === 0){
@@ -248,6 +249,31 @@ function extendVector(p1, p2) {
 // }
 
 
+// Function to rotate a point around a given axis
+p5.Vector.prototype.rotatePointAroundVector = function(axis, theta) {
+        // Normalize the axis vector
+    let axisLength = Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
+    let k = [axis.x / axisLength, axis.y / axisLength, axis.z / axisLength];
+
+    // Calculate the dot product of k and point
+    let dotProduct = k[0] * this.x + k[1] * this.y + k[2] * this.z;
+
+    // Calculate the cross product of k and point
+    let crossProduct = [
+        k[1] * this.z - k[2] * this.y,
+        k[2] * this.x - k[0] * this.z,
+        k[0] * this.y - k[1] * this.x
+    ];
+
+    // Calculate the rotated point
+    let cosTheta = Math.cos(theta);
+    let sinTheta = Math.sin(theta);
+    
+    this.x = this.x * cosTheta + crossProduct[0] * sinTheta + k[0] * dotProduct * (1 - cosTheta);
+    this.y = this.y * cosTheta + crossProduct[1] * sinTheta + k[1] * dotProduct * (1 - cosTheta);
+    this.z = this.z * cosTheta + crossProduct[2] * sinTheta + k[2] * dotProduct * (1 - cosTheta);
+    
+}
 
 p5.Vector.prototype.vectorToPerspective = function(){
     const scale = camFov / (camFov - this.z);
