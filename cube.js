@@ -158,6 +158,8 @@ class Cube{
             for(let pi = 0 ; pi < this.planeCut[i].vertices.length; pi ++){
                 this.planeCut[i].vertices[pi].rotatePointAroundVector(this.planeCutRotationAxis, angleRadian);
             }
+            this.planeCut[i].normal.rotatePointAroundVector(this.planeCutRotationAxis, angleRadian);
+            this.planeCut[i].isVisible = this.planeCut[i].isFacingCamers();
         }
     }
 
