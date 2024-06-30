@@ -112,6 +112,9 @@ class Cube{
                 }
             }
         }
+        // sort faces by face type
+        let sortingTable = {'top' : 1, 'back' : 2, 'left' : 3, 'bottom': 4, 'front' : 5, 'right' : 6}
+        this.faces.sort((a, b) => sortingTable[a.type] - sortingTable[b.type]);
     }
 
     render(){
@@ -197,15 +200,7 @@ class Cube{
 
         // update plane colors
         let modArr;
-        let sortingTable = {
-            'top' : 1,
-            'back' : 2,
-            'left' : 3,
-            'bottom': 4,
-            'front' : 5,
-            'right' : 6
-        }
-        this.planeCut.sort((a, b) => sortingTable[a.type] - sortingTable[b.type]);
+        
 
         if(this.planeCutRotaionMagnitude >= 0){
             let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimantion)));
