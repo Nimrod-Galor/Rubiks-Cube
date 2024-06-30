@@ -3,35 +3,24 @@ var cube;
 var cameraPosition;
 var camFov = 800;
 var cubeDimantion = 3;
-//var cubieSize = 100;
 const rotationSpeed = 0.05;
 
 var mouseStartX = 0;
 var mouseStartY = 0;
 
-const cutPlaneRotationSpeed = 0.02;
+// const cutPlaneRotationSpeed = 0.02;
 
 function setup() {
     createCanvas(800, 800, WEBGL);
 
     cam = createCamera();
     cam.setPosition(0, 0, camFov);
-    // let left = width * -0.5;
-    // let right = width * 0.5;
-    // let top = height * -0.5;
-    // let bottom = height * 0.5
-    // let near = 0;
-    // let far = max(width, height) + 8000;
-    // ortho(left, right, bottom, top, near, far);
     ortho();
-    
     cameraPosition = createVector(0, 0, -1);
 
-    let cubieSize = 300 / cubeDimantion 
-
+    let cubieSize = Math.ceil(300 / cubeDimantion);
     cube = new Cube(cubeDimantion, cubieSize); //cubeDimantion, cubieSize
     cube.initFaces();
-
     cube.rotateCube(-45, 45, -35);
 }
   
@@ -58,11 +47,6 @@ function mouseReleased(){
     mouseStartY = 0;
 }
 
-
-function fixPosition(num){
-    return (num - (width * 0.5));
-}
-
 function mouseDragged() {
     let y = (pmouseX - mouseX);
     let x = (pmouseY - mouseY);
@@ -78,130 +62,83 @@ function mouseDragged() {
 
             // dont start rotation befor mouse movement min 10px
             if(Math.abs(x) > 10 || Math.abs(y) > 10){
-                // mouse start
+                // mouse start point
                 let p1 = {x : fixPosition(mouseStartX), y : fixPosition(mouseStartY), z : 0};
-                // // // mouse end
+                // mouse end point
                 let p2 = {x : fixPosition(mouseX), y : fixPosition(mouseY), z : 0};
-                // // extend mouse end
+                // extend mouse end
                 const extendedP2 = extendVector(p1, p2);
-
-
-
-
+                const selectedFace = cube.faces[cube.selectedFaceId];
+                const vertices = selectedFace.vertices;
+                const faceHierarchy = selectedFace.hierarchy;
                 // for every line in face check if mouse vector intersects it.
-                let selectedFace = cube.faces[cube.selectedFaceId];
-                let vertices = selectedFace.vertices;
-                let faceHierarchy = selectedFace.hierarchy;
                 for(let i = 0 ; i < vertices.length; i++){
                     // set face line points
                     l1 = vertices[i];
                     l2 = vertices[(i + 1) % vertices.length];
                     // check if mouse vector intersect face line
                     if(doLinesIntersect(p1, extendedP2, l1, l2)){
+                        let intersectVec = p5.Vector.sub(l1, l2);
+                        let angleX = Math.round(degrees(cube.normalX.angleBetween(intersectVec)));
+                        let angleY = Math.round(degrees(cube.normalY.angleBetween(intersectVec)));
+                        let angleZ = Math.round(degrees(cube.normalZ.angleBetween(intersectVec)));
+                        console.log("normal x", angleX);
+                        console.log("normal y", angleY);
+                        console.log("normal z", angleZ);
 
-                        let intersectVec = createVector(l1.x - l2.x, l1.y - l2.y, l1.z - l2.z);
-                        // let dp = p5.Vector.dot(selectedFace.normal, intersectVec);
-                        // console.log(dp);
-                        // print(degrees(intersectVec.heading()));
-                        // Calculate the cross product.
-                        // let cp = intersectVec.cross(selectedFace.normal);
+                        if(Math.abs(angleX) === 180 || Math.abs(angleX) === 0){
+                            // x axis
+                            cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
+                            cube.planeCutRotaionMagnitude *= angleY < 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotationAxis = cube.normalX;
+                            if(selectedFace.hierarchy.x === 0){
+                                cube.faceCutType = 'left';
+                            }else if(selectedFace.hierarchy.x === cube.cubeDimantion){
+                                cube.faceCutType = 'right';
+                            }else{
+                                cube.faceCutType = '';
+                            }
+                        }
 
-                        // print(cp.toString());
+                        if(Math.abs(angleY) === 180 || Math.abs(angleY) === 0){
+                            // y axis
+                            cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
+                            cube.planeCutRotaionMagnitude *= angleZ > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotationAxis = cube.normalY;
+                            if(selectedFace.hierarchy.y === 0){
+                                cube.faceCutType = 'top';
+                            }else if(selectedFace.hierarchy.y === cube.cubeDimantion){
+                                cube.faceCutType = 'bottom';
+                            }else{
+                                cube.faceCutType = '';
+                            }
+                        }
 
-                        // console.log(i);
+                        if(Math.abs(angleZ) === 180 || Math.abs(angleZ) === 0){
+                            // z axis
+                            cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
+                            cube.planeCutRotaionMagnitude *= angleX > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotationAxis = cube.normalZ;
+                            if(selectedFace.hierarchy.z === 0){
+                                cube.faceCutType = 'front';
+                            }else if(selectedFace.hierarchy.z === cube.cubeDimantion){
+                                cube.faceCutType = 'back';
+                            }else{
+                                cube.faceCutType = '';
+                            }
+                        }
 
-                        // const vectorA_XY = createVector(cube.normal.x, cube.normal.y, 0);
-                        // const vectorB_XY = createVector(intersectVec.x, intersectVec.y, 0);
-                        // console.log("1", degrees(vectorA_XY.angleBetween(vectorB_XY)));
-
-                        console.log("normal x", Math.abs(Math.round(degrees(cube.normalX.angleBetween(intersectVec)))));
-                        console.log("normal y", Math.abs(Math.round(degrees(cube.normalY.angleBetween(intersectVec)))));
-                        console.log("normal z", Math.abs(Math.round(degrees(cube.normalZ.angleBetween(intersectVec)))));
-
-
-
-
-
-                        // switch(selectedFace.type){
-                        //     case 'front': // rotation on Y and X
-                        //         if(i === 0){// top
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                        //             cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? 1 : -1;
-                        //             cube.planeCutRotationAxis = cube.orientation[5].normal;
-                        //             cube.faceCutType = 'left';
-                        //             console.log("top");
-                        //         }else if(i === 1){//right
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                        //             console.log("right");
-                        //         }else if(i === 2){// bottom
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                        //             cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? -1 : 1;
-                        //             cube.planeCutRotationAxis = cube.orientation[5].normal;
-                        //             cube.faceCutType = 'left';
-                        //             console.log("bottom");
-                        //         }else{// left
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                        //             console.log("left");
-                        //         }
-                        //     case 'back':
-                        //     break;
-                        //     case 'top': // rotation on X and Z
-                        //     case 'bottom':
-                        //         if(i === 0){// top
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                        //             console.log("top");
-                        //         }else if(i === 1){//left
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                        //             console.log("left");
-                        //         }else if(i === 2){// bottom
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                        //             console.log("bottom");
-                        //         }else{// right
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                        //             console.log("right");
-                        //         }
-                        //     break;
-                        //     case 'left':// rotation on Z and Y
-                        //     case 'right':
-                        //         if(i === 0){// top
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                        //             console.log("top");
-                        //         }else if(i === 1){//left
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                        //             console.log("left");
-                        //         }else if(i === 2){// bottom
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                        //             console.log("bottom");
-                        //         }else{// right
-                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                        //             console.log("right");
-                        //         }
-                        //     break;
-                        // }
-                        break;
+                        return;
                     }
                 }
-
-
-                // for(let i = 0; i < cube.planeCut.length; i++){
-                //     cube.planeCut[i].isVisible = true;
-                // }
             }
         }
     }
 }
 
-// function pointToVector(point){
-//     return createVector(point[0], point[1], point[2]);
-// }
-
-// function getVectorOfPOints(p1, p2){
-//     let vecX = p1[0] - p2[0];
-//     let vecY = p1[1] - p2[1];
-//     let vecZ = p1[2] - p2[2];
-
-//     return createVector(vecX, vecY, vecZ);
-// }
+function fixPosition(num){
+    return (num - (width * 0.5));
+}
 
 // Function to check if two lines intersect
 function doLinesIntersect(p1, p2, l1, l2) {
@@ -251,89 +188,6 @@ function extendVector(p1, p2) {
         x: p1.x + directionX * largeValue,
         y: p1.y + directionY * largeValue
     };
-}
-
-// Function to calculate the angle between two vectors
-// function angleBetweenVectors(v1, v2) {
-//     // v1.normalize();
-//     // v2.normalize();
-//     // Calculate the dot product of v1 and v2
-//     const dotProduct = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-
-//     // Calculate the magnitudes of v1 and v2
-//     const magnitudeV1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
-//     const magnitudeV2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
-
-//     // Calculate the cosine of the angle
-//     const cosTheta = dotProduct / (magnitudeV1 * magnitudeV2);
-
-//     // Use Math.acos to get the angle in radians
-//     const angleInRadians = Math.acos(cosTheta);
-
-//     // Convert the angle from radians to degrees
-//     const angleInDegrees = angleInRadians * (180 / Math.PI);
-
-//     return angleInDegrees;
-// }
-
-
-// Function to rotate a point around a given axis
-p5.Vector.prototype.rotatePointAroundVector = function(axis, theta) {
-        // Normalize the axis vector
-    // let axisLength = Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
-    //let axisLength = axis.magSq();
-    // let k = [axis.x / axisLength, axis.y / axisLength, axis.z / axisLength];
-    axis.normalize();
-
-    // Calculate the dot product of k and point
-    //let dotProduct = k[0] * this.x + k[1] * this.y + k[2] * this.z;
-    let dotProduct = this.dot(axis);
-
-    // Calculate the cross product of k and point
-    // let crossProduct = [
-    //     k[1] * this.z - k[2] * this.y,
-    //     k[2] * this.x - k[0] * this.z,
-    //     k[0] * this.y - k[1] * this.x
-    // ];
-    let crossProduct = this.cross(axis);
-
-
-    // Calculate the rotated point
-    let cosTheta = Math.cos(theta);
-    let sinTheta = Math.sin(theta);
-    
-    // this.x = this.x * cosTheta + crossProduct[0] * sinTheta + k[0] * dotProduct * (1 - cosTheta);
-    // this.y = this.y * cosTheta + crossProduct[1] * sinTheta + k[1] * dotProduct * (1 - cosTheta);
-    // this.z = this.z * cosTheta + crossProduct[2] * sinTheta + k[2] * dotProduct * (1 - cosTheta);
-
-    this.x = this.x * cosTheta + crossProduct.x * sinTheta + axis.x * dotProduct * (1 - cosTheta);
-    this.y = this.y * cosTheta + crossProduct.y * sinTheta + axis.y * dotProduct * (1 - cosTheta);
-    this.z = this.z * cosTheta + crossProduct.z * sinTheta + axis.z * dotProduct * (1 - cosTheta);
-    
-}
-
-p5.Vector.prototype.vectorToPerspective = function(){
-    const scale = camFov / (camFov - this.z);
-    const x = this.x * scale;
-    const y = this.y * scale;
-    const res = {x: x, y: y, z: this.z};
-    return res;
-}
-
-// Function to rotate a point using a rotation matrix
-p5.Vector.prototype.pointRotate = function(rotationMatrix) {
-    let point = [this.x, this.y, this.z];
-    let result = [];
-    for (let i = 0; i < rotationMatrix.length; i++) {
-        result[i] = 0;
-        for (let j = 0; j < point.length; j++) {
-            result[i] += rotationMatrix[i][j] * point[j];
-        }
-    }
-    
-    this.x = result[0];
-    this.y = result[1];
-    this.z = result[2];
 }
 
 // Function to create a rotation matrix for the x-axis
@@ -394,4 +248,44 @@ function multiplyMatrices(a, b) {
     return result;
 }
 
+// Function to rotate a point around a given axis
+p5.Vector.prototype.rotatePointAroundVector = function(axis, theta) {
+    // Normalize the axis vector
+    axis.normalize();
 
+    // Calculate the dot product of k and point
+    let dotProduct = this.dot(axis);
+    let crossProduct = this.cross(axis);
+
+    // Calculate the rotated point
+    let cosTheta = Math.cos(theta);
+    let sinTheta = Math.sin(theta);
+
+    this.x = this.x * cosTheta + crossProduct.x * sinTheta + axis.x * dotProduct * (1 - cosTheta);
+    this.y = this.y * cosTheta + crossProduct.y * sinTheta + axis.y * dotProduct * (1 - cosTheta);
+    this.z = this.z * cosTheta + crossProduct.z * sinTheta + axis.z * dotProduct * (1 - cosTheta);    
+}
+
+p5.Vector.prototype.vectorToPerspective = function(){
+    const scale = camFov / (camFov - this.z);
+    const x = this.x * scale;
+    const y = this.y * scale;
+    const res = {x: x, y: y, z: this.z};
+    return res;
+}
+
+// Function to rotate a point using a rotation matrix
+p5.Vector.prototype.pointRotate = function(rotationMatrix) {
+    let point = [this.x, this.y, this.z];
+    let result = [];
+    for (let i = 0; i < rotationMatrix.length; i++) {
+        result[i] = 0;
+        for (let j = 0; j < point.length; j++) {
+            result[i] += rotationMatrix[i][j] * point[j];
+        }
+    }
+    
+    this.x = result[0];
+    this.y = result[1];
+    this.z = result[2];
+}

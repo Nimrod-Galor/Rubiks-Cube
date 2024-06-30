@@ -188,7 +188,7 @@ class Cube{
         let modArr;
         
 
-        if(this.planeCutRotaionMagnitude >= 0){
+        if(this.planeCutRotaionMagnitude <= 0){
             let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimantion)));
             let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(-this.dimantion)));
             modArr = [...endItems, ...startItems];
