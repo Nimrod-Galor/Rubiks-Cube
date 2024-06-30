@@ -161,11 +161,29 @@ class Cube{
     finalizeCutPlane(){
         // roatae back 90 degrees
         this.rotateCutPlane(this.planeCutRotaionDone * -1);
-        //extract face plane is exist
         if(this.faceCutType != ''){
-            let faceCut = this.planeCut.filter(f => f.type === this.faceCutType);
             // update face colors
+            //extract face plane
+            let faceCut = this.planeCut.filter(f => f.type === this.faceCutType);
+            let faceMatrix = [];
+            
+            let index = 0;
+            //convert plain array to matrix
+            for(let r = 0; r <= 2; r++){
+                faceMatrix[r] = [];
+                for(let c = 0; c <= 2; c++){
+                    faceMatrix[r][c] = faceCut[index].colorIndex;
+                    index++;
+                }
+            }
+            
+            // rotate matrix
+            faceMatrix = this.planeCutRotaionMagnitude >= 0 ? faceMatrix[0].map((val, index) => faceMatrix.map(row => row[index]).reverse()) : faceMatrix[0].map((val, index) => faceMatrix.map(row => row[row.length-1-index]));
 
+            // update colors
+            for(let i =0; i < faceCut.length; i++){
+                faceCut[i].colorIndex = faceMatrix[i];
+            }
 
             //remove face cut from plane cut
             this.planeCut = this.planeCut.filter(f => f.type !== this.faceCutType);
@@ -185,11 +203,11 @@ class Cube{
             if(this.faces[i].isVisible && isPointInPolygon(x, y, this.faces[i].vertices)){
                 // click was inside face
                 this.selectedFaceId = i;
-                this.cubeRotate = true
+                this.cubeRotate = false;
                 return;
             }
         }
-        this.cubeRotate = false;
+        this.cubeRotate = true;
     }
 }
 
