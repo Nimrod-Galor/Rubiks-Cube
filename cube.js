@@ -181,8 +181,14 @@ class Cube{
             faceMatrix = this.planeCutRotaionMagnitude >= 0 ? faceMatrix[0].map((val, index) => faceMatrix.map(row => row[index]).reverse()) : faceMatrix[0].map((val, index) => faceMatrix.map(row => row[row.length-1-index]));
 
             // update colors
-            for(let i =0; i < faceCut.length; i++){
-                faceCut[i].colorIndex = faceMatrix[i];
+
+            index = 0;
+            for(let r = 0; r <= 2; r++){
+                for(let c = 0; c <= 2; c++){
+                    // update cubie colors
+                    faceCut[index].colorIndex = faceMatrix[r][c];
+                    index++;
+                }
             }
 
             //remove face cut from plane cut
@@ -190,7 +196,33 @@ class Cube{
         }
 
         // update plane colors
-        
+        let modArr;
+        let sortingTable = {
+            'top' : 1,
+            'back' : 2,
+            'left' : 3,
+            'bottom': 4,
+            'front' : 5,
+            'right' : 6
+        }
+        this.planeCut.sort((a, b) => sortingTable[a.type] - sortingTable[b.type]);
+
+        if(this.planeCutRotaionMagnitude >= 0){
+            let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimantion)));
+            let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(-this.dimantion)));
+            modArr = [...endItems, ...startItems];
+        }else{
+            let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, this.dimantion)));
+            let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(this.dimantion)));
+            modArr = [...endItems, ...startItems];
+        }
+
+
+        for(let i = 0; i < this.planeCut.length; i++){
+            this.planeCut[i].colorIndex = modArr[i].colorIndex;
+        }
+
+
 
         // reset cut
         this.planeCut = [];
