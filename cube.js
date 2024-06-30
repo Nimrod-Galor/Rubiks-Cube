@@ -12,14 +12,17 @@ class Cube{
             color(255, 255, 0), // 5 bottom yellow
             color(51) // test
         ];
-        this.orientation = [
-            {faceId : 'back', normal: createVector(0, 0, -1), isVisible : false},
-            {faceId : 'front', normal: createVector(0, 0, 1), isVisible : false},
-            {faceId : 'top', normal: createVector(0, -1, 0), isVisible : false},
-            {faceId : 'bottom', normal: createVector(0, 1, 0), isVisible : false},
-            {faceId : 'right', normal: createVector(1, 0, 0), isVisible : false},
-            {faceId : 'left', normal: createVector(-1, 0, 0), isVisible : false},
-        ];
+        this.normalX = createVector(1, 0, 0);
+        this.normalY = createVector(0, 1, 0);
+        this.normalZ = createVector(0, 0, 1);
+        // this.orientation = [
+        //     {faceId : 'back', normal: createVector(0, 0, -1), isVisible : false},
+        //     {faceId : 'front', normal: createVector(0, 0, 1), isVisible : false},
+        //     {faceId : 'top', normal: createVector(0, -1, 0), isVisible : false},
+        //     {faceId : 'bottom', normal: createVector(0, 1, 0), isVisible : false},
+        //     {faceId : 'right', normal: createVector(1, 0, 0), isVisible : false},
+        //     {faceId : 'left', normal: createVector(-1, 0, 0), isVisible : false},
+        // ];
         
         this.cubeRotate = false;
         this.cutRotate = false;
@@ -42,6 +45,7 @@ class Cube{
                     let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
                     if(z === 0){                    // back face
                         let f = new Face('back', 3, hierarchy);
+                        // f.rotateFace(180, 0, 0);
                         f.normal.z = -1
                         let mz = -R;
                         f.moveFace(mx, my, mz);
@@ -62,20 +66,19 @@ class Cube{
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
-
+                    
                     if(y === this.dimantion - 1){   // bottom face
                         let f = new Face('bottom', 5, hierarchy);
                         let my = R;
-                        f.rotateFace(90, 0, 0);
+                        f.rotateFace(-90, 0, 0);
                         f.normal.y = 1;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
-
                     if(x === 0){                    // left face
                         let f = new Face('left', 4, hierarchy);
                         let mx = -R;
-                        f.rotateFace(0, 90, 0);
+                        f.rotateFace(0, -90, 0);
                         f.normal.x = -1;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
@@ -119,11 +122,15 @@ class Cube{
 
     rotateCube(x, y, z){
         let rotationMatrix = getRotationMatrix(x, y, z);
-        for(let i = 0; i < this.orientation.length; i++){
-            this.orientation[i].normal.pointRotate(rotationMatrix);
-            //this.orientation[i].isVisible = isTriangleFacingCamera(this.orientation[i].normal);
-        }
+        // for(let i = 0; i < this.orientation.length; i++){
+        //     this.orientation[i].normal.pointRotate(rotationMatrix);
+        //     //this.orientation[i].isVisible = isTriangleFacingCamera(this.orientation[i].normal);
+        // }
         
+        this.normalX.pointRotate(rotationMatrix);
+        this.normalY.pointRotate(rotationMatrix);
+        this.normalZ.pointRotate(rotationMatrix);
+
         for(let i = 0 ; i < this.faces.length; i++){
             this.faces[i].rotateFace(x, y, z);
         }

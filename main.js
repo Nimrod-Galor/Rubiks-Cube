@@ -80,77 +80,104 @@ function mouseDragged() {
             if(Math.abs(x) > 10 || Math.abs(y) > 10){
                 // mouse start
                 let p1 = {x : fixPosition(mouseStartX), y : fixPosition(mouseStartY), z : 0};
-                // mouse end
+                // // // mouse end
                 let p2 = {x : fixPosition(mouseX), y : fixPosition(mouseY), z : 0};
-                // extend mouse end
+                // // extend mouse end
                 const extendedP2 = extendVector(p1, p2);
+
+
+
 
                 // for every line in face check if mouse vector intersects it.
                 let selectedFace = cube.faces[cube.selectedFaceId];
-                let vertices = cube.faces[cube.selectedFaceId].vertices;
-                let faceHierarchy = cube.faces[cube.selectedFaceId].hierarchy;
+                let vertices = selectedFace.vertices;
+                let faceHierarchy = selectedFace.hierarchy;
                 for(let i = 0 ; i < vertices.length; i++){
                     // set face line points
                     l1 = vertices[i];
                     l2 = vertices[(i + 1) % vertices.length];
                     // check if mouse vector intersect face line
                     if(doLinesIntersect(p1, extendedP2, l1, l2)){
-                        switch(selectedFace.type){
-                            case 'front': // rotation on Y and X
-                                if(i === 0){// top
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                                    cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? 1 : -1;
-                                    cube.planeCutRotationAxis = cube.orientation[5].normal;
-                                    cube.faceCutType = 'left';
-                                    console.log("top");
-                                }else if(i === 1){//right
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                                    console.log("right");
-                                }else if(i === 2){// bottom
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                                    cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? -1 : 1;
-                                    cube.planeCutRotationAxis = cube.orientation[5].normal;
-                                    cube.faceCutType = 'left';
-                                    console.log("bottom");
-                                }else{// left
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                                    console.log("left");
-                                }
-                            case 'back':
-                            break;
-                            case 'top': // rotation on X and Z
-                            case 'bottom':
-                                if(i === 0){// top
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                                    console.log("top");
-                                }else if(i === 1){//left
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                                    console.log("left");
-                                }else if(i === 2){// bottom
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                                    console.log("bottom");
-                                }else{// right
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                                    console.log("right");
-                                }
-                            break;
-                            case 'left':// rotation on Z and Y
-                            case 'right':
-                                if(i === 0){// top
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                                    console.log("top");
-                                }else if(i === 1){//left
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                                    console.log("left");
-                                }else if(i === 2){// bottom
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                                    console.log("bottom");
-                                }else{// right
-                                    cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                                    console.log("right");
-                                }
-                            break;
-                        }
+
+                        let intersectVec = createVector(l1.x - l2.x, l1.y - l2.y, l1.z - l2.z);
+                        // let dp = p5.Vector.dot(selectedFace.normal, intersectVec);
+                        // console.log(dp);
+                        // print(degrees(intersectVec.heading()));
+                        // Calculate the cross product.
+                        // let cp = intersectVec.cross(selectedFace.normal);
+
+                        // print(cp.toString());
+
+                        // console.log(i);
+
+                        // const vectorA_XY = createVector(cube.normal.x, cube.normal.y, 0);
+                        // const vectorB_XY = createVector(intersectVec.x, intersectVec.y, 0);
+                        // console.log("1", degrees(vectorA_XY.angleBetween(vectorB_XY)));
+
+                        console.log("normal x", Math.abs(Math.round(degrees(cube.normalX.angleBetween(intersectVec)))));
+                        console.log("normal y", Math.abs(Math.round(degrees(cube.normalY.angleBetween(intersectVec)))));
+                        console.log("normal z", Math.abs(Math.round(degrees(cube.normalZ.angleBetween(intersectVec)))));
+
+
+
+
+
+                        // switch(selectedFace.type){
+                        //     case 'front': // rotation on Y and X
+                        //         if(i === 0){// top
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
+                        //             cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? 1 : -1;
+                        //             cube.planeCutRotationAxis = cube.orientation[5].normal;
+                        //             cube.faceCutType = 'left';
+                        //             console.log("top");
+                        //         }else if(i === 1){//right
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
+                        //             console.log("right");
+                        //         }else if(i === 2){// bottom
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
+                        //             cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? -1 : 1;
+                        //             cube.planeCutRotationAxis = cube.orientation[5].normal;
+                        //             cube.faceCutType = 'left';
+                        //             console.log("bottom");
+                        //         }else{// left
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
+                        //             console.log("left");
+                        //         }
+                        //     case 'back':
+                        //     break;
+                        //     case 'top': // rotation on X and Z
+                        //     case 'bottom':
+                        //         if(i === 0){// top
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
+                        //             console.log("top");
+                        //         }else if(i === 1){//left
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
+                        //             console.log("left");
+                        //         }else if(i === 2){// bottom
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
+                        //             console.log("bottom");
+                        //         }else{// right
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
+                        //             console.log("right");
+                        //         }
+                        //     break;
+                        //     case 'left':// rotation on Z and Y
+                        //     case 'right':
+                        //         if(i === 0){// top
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
+                        //             console.log("top");
+                        //         }else if(i === 1){//left
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
+                        //             console.log("left");
+                        //         }else if(i === 2){// bottom
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
+                        //             console.log("bottom");
+                        //         }else{// right
+                        //             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
+                        //             console.log("right");
+                        //         }
+                        //     break;
+                        // }
                         break;
                     }
                 }
@@ -366,3 +393,5 @@ function multiplyMatrices(a, b) {
     }
     return result;
 }
+
+
