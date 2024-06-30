@@ -37,48 +37,35 @@ class Cube{
             for(let x = 0; x < this.dimantion; x++){
                 for(let y = 0; y < this.dimantion; y++){
                     let hierarchy = {z: z, x:x, y: y};
+                    let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
+                    let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
+                    let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
                     if(z === 0){// back face
-                        //let normal = createVector(0, 0, -1);
-                        //let f = new Face('back', normal, 3, hierarchy);
                         let f = new Face('back', 3, hierarchy);
                         f.normal.z = -1
-                        let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
-                        let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
-                        let mz = R * -1;
+                        let mz = -R;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
                     
                     if(z === this.dimantion - 1){ // front face
-                        //let normal = createVector(0, 0, 1);
-                        //let f = new Face('front', normal, 1, hierarchy);
                         let f = new Face('front', 1, hierarchy);
-                        let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
-                        let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
                         let mz = R;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
 
                     if(y === 0){ // top face
-                        //let normal = createVector(0, 1, 0);
-                        //let f = new Face('top', normal, 0, hierarchy);
                         let f = new Face('top', 0, hierarchy);
-                        let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
-                        let my = (-R - this.cubieSize * 0.5) + (this.cubieSize * 0.5);
-                        let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let my = -R;
                         f.rotateFace(90, 0, 0);
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
 
                     if(y === this.dimantion - 1){ // bottom face
-                        //let normal = createVector(0, -1, 0);
-                        //let f = new Face('bottom', normal, 5, hierarchy);
                         let f = new Face('bottom', 5, hierarchy);
-                        let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
-                        let my = (R + this.cubieSize * 0.5) - (this.cubieSize * 0.5);
-                        let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let my = R;
                         f.rotateFace(90, 0, 0);
                         f.normal.y = 1;
                         f.moveFace(mx, my, mz);
@@ -86,12 +73,8 @@ class Cube{
                     }
 
                     if(x === 0){ // left face
-                        //let normal = createVector(-1, 0, 0);
-                        //let f = new Face('left', normal, 4, hierarchy);
                         let f = new Face('left', 4, hierarchy);
-                        let mx = (-R - this.cubieSize * 0.5) + (this.cubieSize * 0.5);
-                        let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
-                        let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let mx = -R;
                         f.rotateFace(0, 90, 0);
                         f.normal.x = -1;
                         f.moveFace(mx, my, mz);
@@ -99,12 +82,8 @@ class Cube{
                     }
 
                     if(x ===  this.dimantion - 1){ // right face
-                        //let normal = createVector(1, 0, 0);
-                        //let f = new Face('right', normal, 2, hierarchy);
                         let f = new Face('right', 2, hierarchy);
-                        let mx = (R + this.cubieSize * 0.5) - (this.cubieSize * 0.5);
-                        let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
-                        let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
+                        let mx = R;
                         f.rotateFace(0, 90, 0);
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
