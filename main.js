@@ -101,6 +101,7 @@ function mouseDragged() {
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
                                     cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? 1 : -1;
                                     cube.planeCutRotationAxis = cube.orientation[5].normal;
+                                    cube.faceCutType = 'left';
                                     console.log("top");
                                 }else if(i === 1){//right
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);

@@ -27,6 +27,7 @@ class Cube{
         this.planeCutRotationAxis = createVector(0, 0, 0);
         this.planeCutRotaionMagnitude = radians(5);
         this.planeCutRotaionDone = 0;
+        this.faceCutType = '';
     }
 
     initFaces(){
@@ -143,7 +144,6 @@ class Cube{
         
         for(let i = 0 ; i < this.faces.length; i++){
             this.faces[i].rotateFace(x, y, z);
-            //this.faces[i].isVisible = this.faces[i].isFacingCamers();
         }
     }
 
@@ -154,14 +154,24 @@ class Cube{
                 this.planeCut[i].vertices[pi].rotatePointAroundVector(this.planeCutRotationAxis, angleRadian);
             }
             this.planeCut[i].normal.rotatePointAroundVector(this.planeCutRotationAxis, angleRadian);
-            this.planeCut[i].isVisible = this.planeCut[i].isFacingCamers();
+            this.planeCut[i].isFacingCamers();
         }
     }
 
     finalizeCutPlane(){
         // roatae back 90 degrees
         this.rotateCutPlane(this.planeCutRotaionDone * -1);
-        // update colors
+        //extract face plane is exist
+        if(this.faceCutType != ''){
+            let faceCut = this.planeCut.filter(f => f.type === this.faceCutType);
+            // update face colors
+
+
+            //remove face cut from plane cut
+            this.planeCut = this.planeCut.filter(f => f.type !== this.faceCutType);
+        }
+
+        // update plane colors
         
 
         // reset cut

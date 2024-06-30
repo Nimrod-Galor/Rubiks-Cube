@@ -27,7 +27,7 @@ class Face{
         }
         // rotate normal
         this.normal.pointRotate(rotationMatrix);
-        this.isVisible = this.isFacingCamers();
+        this.isFacingCamers();
     }
 
     moveFace(x, y, z){
@@ -45,7 +45,7 @@ class Face{
         let dot = this.normal.dot(cameraPosition);
     
         // If the dot product is positive, the triangle is facing the camera
-        return dot < -0.19;
+        this.isVisible = (dot < -0.19);
     }
     
     render(){
