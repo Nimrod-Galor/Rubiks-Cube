@@ -36,11 +36,11 @@ class Cube{
         for(let z = 0; z < this.dimantion; z++){
             for(let x = 0; x < this.dimantion; x++){
                 for(let y = 0; y < this.dimantion; y++){
-                    let hierarchy = {z: z, x:x, y: y};
+                    let hierarchy = {z: z, x: x, y: y};
                     let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
                     let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
                     let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
-                    if(z === 0){// back face
+                    if(z === 0){                    // back face
                         let f = new Face('back', 3, hierarchy);
                         f.normal.z = -1
                         let mz = -R;
@@ -48,14 +48,14 @@ class Cube{
                         this.faces.push(f);
                     }
                     
-                    if(z === this.dimantion - 1){ // front face
+                    if(z === this.dimantion - 1){   // front face
                         let f = new Face('front', 1, hierarchy);
                         let mz = R;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
                     }
 
-                    if(y === 0){ // top face
+                    if(y === 0){                    // top face
                         let f = new Face('top', 0, hierarchy);
                         let my = -R;
                         f.rotateFace(90, 0, 0);
@@ -63,7 +63,7 @@ class Cube{
                         this.faces.push(f);
                     }
 
-                    if(y === this.dimantion - 1){ // bottom face
+                    if(y === this.dimantion - 1){   // bottom face
                         let f = new Face('bottom', 5, hierarchy);
                         let my = R;
                         f.rotateFace(90, 0, 0);
@@ -72,7 +72,7 @@ class Cube{
                         this.faces.push(f);
                     }
 
-                    if(x === 0){ // left face
+                    if(x === 0){                    // left face
                         let f = new Face('left', 4, hierarchy);
                         let mx = -R;
                         f.rotateFace(0, 90, 0);
@@ -81,7 +81,7 @@ class Cube{
                         this.faces.push(f);
                     }
 
-                    if(x ===  this.dimantion - 1){ // right face
+                    if(x ===  this.dimantion - 1){  // right face
                         let f = new Face('right', 2, hierarchy);
                         let mx = R;
                         f.rotateFace(0, 90, 0);
@@ -92,7 +92,7 @@ class Cube{
             }
         }
         // sort faces by face type
-        let sortingTable = {'top' : 1, 'back' : 2, 'left' : 3, 'bottom': 4, 'front' : 5, 'right' : 6}
+        let sortingTable = {'top' : 1, 'back' : 2, 'left' : 3, 'bottom': 4, 'front' : 5, 'right' : 6};
         this.faces.sort((a, b) => sortingTable[a.type] - sortingTable[b.type]);
     }
 
