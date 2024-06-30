@@ -97,14 +97,10 @@ function mouseDragged() {
                     if(doLinesIntersect(p1, extendedP2, l1, l2)){
                         switch(selectedFace.type){
                             case 'front': // rotation on Y and X
-                            case 'back':
                                 if(i === 0){// top
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-
-                                    cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? -1 : 1;
-
+                                    cube.planeCutRotaionMagnitude *= cube.planeCutRotaionMagnitude > 0 ? 1 : -1;
                                     cube.planeCutRotationAxis = cube.orientation[5].normal;
-
                                     console.log("top");
                                 }else if(i === 1){//right
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
@@ -116,6 +112,7 @@ function mouseDragged() {
                                     cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
                                     console.log("left");
                                 }
+                            case 'back':
                             break;
                             case 'top': // rotation on X and Z
                             case 'bottom':
