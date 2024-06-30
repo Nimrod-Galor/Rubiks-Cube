@@ -50,8 +50,8 @@ class Face{
     
     render(){
         push();
-        //fill(cube.colors[this.colorIndex]);
-        noFill();
+        fill(cube.colors[this.colorIndex]);
+        // noFill();
         strokeWeight(4);
         beginShape();
         for(let i = 0 ; i < this.vertices.length; i++){

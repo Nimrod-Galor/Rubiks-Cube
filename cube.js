@@ -117,17 +117,12 @@ class Cube{
         if(this.planeCut.length > 0){
             this.rotateCutPlane(this.planeCutRotaionMagnitude);
             this.planeCutRotaionDone += this.planeCutRotaionMagnitude;
-            console.log(degrees(this.planeCutRotaionDone));
+            //console.log(degrees(this.planeCutRotaionDone));
             
 
             if(Math.abs(degrees(this.planeCutRotaionDone)) >= 89){
                 console.log("IN");
-
-                // roatae back 90 degrees
-                this.rotateCutPlane(this.planeCutRotaionDone * -1);
-                this.planeCut = [];
-                cube.cutRotate = false;
-                this.planeCutRotaionDone = 0
+                this.finalizeCutPlane();
             }
             
         }
@@ -163,15 +158,28 @@ class Cube{
         }
     }
 
-    faceClicked(x, y){
+    finalizeCutPlane(){
+        // roatae back 90 degrees
+        this.rotateCutPlane(this.planeCutRotaionDone * -1);
+        // update colors
+        
+
+        // reset cut
+        this.planeCut = [];
+        this.cutRotate = false;
+        this.planeCutRotaionDone = 0;
+    }
+
+    detectFaceClicked(x, y){
         for(let i = 0; i < this.faces.length; i++){
             if(this.faces[i].isVisible && isPointInPolygon(x, y, this.faces[i].vertices)){
                 // click was inside face
                 this.selectedFaceId = i;
-                return true;
+                this.cubeRotate = true
+                return;
             }
         }
-        return false;
+        this.cubeRotate = false;
     }
 }
 

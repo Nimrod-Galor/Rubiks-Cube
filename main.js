@@ -47,7 +47,7 @@ function draw() {
 function mousePressed(){
     mouseStartX = mouseX;
     mouseStartY = mouseY;
-    cube.cubeRotate = !cube.faceClicked(fixPosition(mouseX), fixPosition(mouseY));
+    cube.detectFaceClicked(fixPosition(mouseX), fixPosition(mouseY));
 }
 
 function mouseReleased(){
