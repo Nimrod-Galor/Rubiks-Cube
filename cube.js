@@ -95,10 +95,8 @@ class Cube{
             this.rotateCutPlane(this.planeCutRotaionMagnitude);
             this.planeCutRotaionDone += this.planeCutRotaionMagnitude;
             //console.log(degrees(this.planeCutRotaionDone));
-            
 
             if(Math.abs(degrees(this.planeCutRotaionDone)) >= 89){
-                console.log("IN");
                 this.finalizeCutPlane();
             }
             
@@ -154,7 +152,7 @@ class Cube{
             }
             // rotate matrix
             faceMatrix = this.planeCutRotaionMagnitude >= 0 ? faceMatrix[0].map((val, index) => faceMatrix.map(row => row[index]).reverse()) : faceMatrix[0].map((val, index) => faceMatrix.map(row => row[row.length-1-index]));
-
+//&& this.planeCutRotationAxis.y == 0 
             // update colors
             index = 0;
             for(let r = 0; r <= 2; r++){

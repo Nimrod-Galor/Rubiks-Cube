@@ -70,19 +70,20 @@ function mouseDragged() {
                 // for every line in face check if mouse vector intersects it.
                 for(let i = 0 ; i < vertices.length; i++){
                     // set face line points
-                    l1 = vertices[i];
-                    l2 = vertices[(i + 1) % vertices.length];
+                    let l1 = vertices[i].pointToPerspective();
+                    let l2 = vertices[(i + 1) % vertices.length].pointToPerspective();
                     // check if mouse vector intersect face line
                     if(doLinesIntersect(p1, extendedP2, l1, l2)){
                         let intersectVec = p5.Vector.sub(l1, l2);
-                        let angleX = Math.round(degrees(cube.normalX.angleBetween(intersectVec)));
-                        let angleY = Math.round(degrees(cube.normalY.angleBetween(intersectVec)));
-                        let angleZ = Math.round(degrees(cube.normalZ.angleBetween(intersectVec)));
+                        let angleX = roundBase(degrees(cube.normalX.angleBetween(intersectVec)), 45);
+                        let angleY = roundBase(degrees(cube.normalY.angleBetween(intersectVec)), 45);
+                        let angleZ = roundBase(degrees(cube.normalZ.angleBetween(intersectVec)), 45);
                         console.log("normal x", angleX);
                         console.log("normal y", angleY);
                         console.log("normal z", angleZ);
 
                         if(Math.abs(angleX) === 180 || Math.abs(angleX) === 0){
+                            console.log("IN");
                             // x axis
                             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
                             cube.planeCutRotaionMagnitude *= angleY < 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
@@ -261,13 +262,13 @@ p5.Vector.prototype.rotatePointAroundVector = function(axis, theta) {
     this.z = this.z * cosTheta + crossProduct.z * sinTheta + axis.z * dotProduct * (1 - cosTheta);    
 }
 
-p5.Vector.prototype.vectorToPerspective = function(){
-    const scale = camFov / (camFov - this.z);
-    const x = this.x * scale;
-    const y = this.y * scale;
-    const res = {x: x, y: y, z: this.z};
-    return res;
-}
+// p5.Vector.prototype.vectorToPerspective = function(){
+//     const scale = camFov / (camFov - this.z);
+//     const x = this.x * scale;
+//     const y = this.y * scale;
+//     const res = {x: x, y: y, z: this.z};
+//     return res;
+// }
 
 // Function to rotate a point using a rotation matrix
 p5.Vector.prototype.pointRotate = function(rotationMatrix) {
@@ -283,4 +284,17 @@ p5.Vector.prototype.pointRotate = function(rotationMatrix) {
     this.x = result[0];
     this.y = result[1];
     this.z = result[2];
+}
+
+p5.Vector.prototype.pointToPerspective = function(){
+    const scale = camFov / (camFov - this.z);
+    let res = createVector(this.x * scale, this.y * scale, this.z);
+    return res;
+}
+
+function roundBase(num, base){
+    const p = Math.round(num / base) * base;
+    return p;
+    const b = num % base > base * 0.5 ? base : 0;
+    return p + b;
 }
