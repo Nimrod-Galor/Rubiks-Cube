@@ -5,24 +5,16 @@ class Cube{
         this.faces = [];
         this.colors = [
             color(255, 255, 255), // 0 top white
-            color(255, 0, 0), // 1 front red
-            color(0, 0, 255), // 2 right blue
-            color(255, 150, 0), // 3 back orange
-            color(0, 255, 0), // 4 left green
-            color(255, 255, 0), // 5 bottom yellow
-            color(51) // test
+            color(255, 0, 0),       // 1 front red
+            color(0, 0, 255),       // 2 right blue
+            color(255, 150, 0),     // 3 back orange
+            color(0, 255, 0),       // 4 left green
+            color(255, 255, 0),     // 5 bottom yellow
+            color(51)               // test
         ];
         this.normalX = createVector(1, 0, 0);
         this.normalY = createVector(0, 1, 0);
         this.normalZ = createVector(0, 0, 1);
-        // this.orientation = [
-        //     {faceId : 'back', normal: createVector(0, 0, -1), isVisible : false},
-        //     {faceId : 'front', normal: createVector(0, 0, 1), isVisible : false},
-        //     {faceId : 'top', normal: createVector(0, -1, 0), isVisible : false},
-        //     {faceId : 'bottom', normal: createVector(0, 1, 0), isVisible : false},
-        //     {faceId : 'right', normal: createVector(1, 0, 0), isVisible : false},
-        //     {faceId : 'left', normal: createVector(-1, 0, 0), isVisible : false},
-        // ];
         
         this.cubeRotate = false;
         this.cutRotate = false;
@@ -45,8 +37,7 @@ class Cube{
                     let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
                     if(z === 0){                    // back face
                         let f = new Face('back', 3, hierarchy);
-                        // f.rotateFace(180, 0, 0);
-                        f.normal.z = -1
+                        f.normal.z = -1;
                         let mz = -R;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
@@ -114,23 +105,19 @@ class Cube{
         }
 
         for(let i = 0 ; i < this.faces.length; i++){
-            if(this.faces[i].isVisible){
+            if(this.faces[i].isVisible){// render only visible faces
                 this.faces[i].render();
             }
         }
     }
 
     rotateCube(x, y, z){
+        // update cube orientation normal
         let rotationMatrix = getRotationMatrix(x, y, z);
-        // for(let i = 0; i < this.orientation.length; i++){
-        //     this.orientation[i].normal.pointRotate(rotationMatrix);
-        //     //this.orientation[i].isVisible = isTriangleFacingCamera(this.orientation[i].normal);
-        // }
-        
         this.normalX.pointRotate(rotationMatrix);
         this.normalY.pointRotate(rotationMatrix);
         this.normalZ.pointRotate(rotationMatrix);
-
+        // rotate faces
         for(let i = 0 ; i < this.faces.length; i++){
             this.faces[i].rotateFace(x, y, z);
         }
@@ -150,14 +137,14 @@ class Cube{
     finalizeCutPlane(){
         // roatae back 90 degrees
         this.rotateCutPlane(this.planeCutRotaionDone * -1);
+        // update face colors
         if(this.faceCutType != ''){
-            // update face colors
+            console.log('faceCutType', this.faceCutType);
             //extract face plane
             let faceCut = this.planeCut.filter(f => f.type === this.faceCutType);
+            //convert plane array to matrix
             let faceMatrix = [];
-            
             let index = 0;
-            //convert plain array to matrix
             for(let r = 0; r <= 2; r++){
                 faceMatrix[r] = [];
                 for(let c = 0; c <= 2; c++){
@@ -165,16 +152,14 @@ class Cube{
                     index++;
                 }
             }
-            
             // rotate matrix
             faceMatrix = this.planeCutRotaionMagnitude >= 0 ? faceMatrix[0].map((val, index) => faceMatrix.map(row => row[index]).reverse()) : faceMatrix[0].map((val, index) => faceMatrix.map(row => row[row.length-1-index]));
 
             // update colors
-
             index = 0;
             for(let r = 0; r <= 2; r++){
                 for(let c = 0; c <= 2; c++){
-                    // update cubie colors
+                    // update face plane cubie colors
                     faceCut[index].colorIndex = faceMatrix[r][c];
                     index++;
                 }
@@ -184,10 +169,8 @@ class Cube{
             this.planeCut = this.planeCut.filter(f => f.type !== this.faceCutType);
         }
 
-        // update plane colors
+        // rotate plane colors
         let modArr;
-        
-
         if(this.planeCutRotaionMagnitude <= 0){
             let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimantion)));
             let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(-this.dimantion)));
@@ -197,13 +180,10 @@ class Cube{
             let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(this.dimantion)));
             modArr = [...endItems, ...startItems];
         }
-
-
+        // update plane colors
         for(let i = 0; i < this.planeCut.length; i++){
             this.planeCut[i].colorIndex = modArr[i].colorIndex;
         }
-
-
 
         // reset cut
         this.planeCut = [];
@@ -223,32 +203,3 @@ class Cube{
         this.cubeRotate = true;
     }
 }
-
-
-// // Function to rotate a point around a given axis
-// function rotatePointAroundVector(point, axis, theta) {
-//     // Normalize the axis vector
-//     let axisLength = Math.sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2]);
-//     let k = [axis[0] / axisLength, axis[1] / axisLength, axis[2] / axisLength];
-
-//     // Calculate the dot product of k and point
-//     let dotProduct = k[0] * point[0] + k[1] * point[1] + k[2] * point[2];
-
-//     // Calculate the cross product of k and point
-//     let crossProduct = [
-//         k[1] * point[2] - k[2] * point[1],
-//         k[2] * point[0] - k[0] * point[2],
-//         k[0] * point[1] - k[1] * point[0]
-//     ];
-
-//     // Calculate the rotated point
-//     let cosTheta = Math.cos(theta);
-//     let sinTheta = Math.sin(theta);
-//     let rotatedPoint = [
-//         point[0] * cosTheta + crossProduct[0] * sinTheta + k[0] * dotProduct * (1 - cosTheta),
-//         point[1] * cosTheta + crossProduct[1] * sinTheta + k[1] * dotProduct * (1 - cosTheta),
-//         point[2] * cosTheta + crossProduct[2] * sinTheta + k[2] * dotProduct * (1 - cosTheta)
-//     ];
-
-//     return rotatedPoint;
-// }

@@ -8,8 +8,6 @@ const rotationSpeed = 0.05;
 var mouseStartX = 0;
 var mouseStartY = 0;
 
-// const cutPlaneRotationSpeed = 0.02;
-
 function setup() {
     createCanvas(800, 800, WEBGL);
 
@@ -41,8 +39,6 @@ function mousePressed(){
 
 function mouseReleased(){
     cube.cubeRotate = false;
-  //  cube.selectedFaceId = -1;
-    //cube.planeCut = [];
     mouseStartX = 0;
     mouseStartY = 0;
 }
@@ -93,7 +89,7 @@ function mouseDragged() {
                             cube.planeCutRotationAxis = cube.normalX;
                             if(selectedFace.hierarchy.x === 0){
                                 cube.faceCutType = 'left';
-                            }else if(selectedFace.hierarchy.x === cube.cubeDimantion){
+                            }else if(selectedFace.hierarchy.x === cube.dimantion - 1){
                                 cube.faceCutType = 'right';
                             }else{
                                 cube.faceCutType = '';
@@ -103,11 +99,11 @@ function mouseDragged() {
                         if(Math.abs(angleY) === 180 || Math.abs(angleY) === 0){
                             // y axis
                             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                            cube.planeCutRotaionMagnitude *= angleZ > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotaionMagnitude *= angleX > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.planeCutRotationAxis = cube.normalY;
                             if(selectedFace.hierarchy.y === 0){
                                 cube.faceCutType = 'top';
-                            }else if(selectedFace.hierarchy.y === cube.cubeDimantion){
+                            }else if(selectedFace.hierarchy.y === cube.dimantion - 1){
                                 cube.faceCutType = 'bottom';
                             }else{
                                 cube.faceCutType = '';
@@ -120,9 +116,9 @@ function mouseDragged() {
                             cube.planeCutRotaionMagnitude *= angleX > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.planeCutRotationAxis = cube.normalZ;
                             if(selectedFace.hierarchy.z === 0){
-                                cube.faceCutType = 'front';
-                            }else if(selectedFace.hierarchy.z === cube.cubeDimantion){
                                 cube.faceCutType = 'back';
+                            }else if(selectedFace.hierarchy.z === cube.dimantion - 1){
+                                cube.faceCutType = 'front';
                             }else{
                                 cube.faceCutType = '';
                             }
@@ -143,10 +139,10 @@ function fixPosition(num){
 // Function to check if two lines intersect
 function doLinesIntersect(p1, p2, l1, l2) {
     // Calculate the direction of the lines
-    let d1 = direction(l1, l2, p1);
-    let d2 = direction(l1, l2, p2);
-    let d3 = direction(p1, p2, l1);
-    let d4 = direction(p1, p2, l2);
+    const d1 = direction(l1, l2, p1);
+    const d2 = direction(l1, l2, p2);
+    const d3 = direction(p1, p2, l1);
+    const d4 = direction(p1, p2, l2);
 
     // Check if the lines intersect
     if (d1 != d2 && d3 != d4) {
@@ -164,7 +160,7 @@ function doLinesIntersect(p1, p2, l1, l2) {
 
 // Function to calculate the direction
 function direction(a, b, c) {
-    let val = (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
+    const val = (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
     if (val == 0) return 0; // Collinear
     return val > 0 ? 1 : 2; // Clock or counterclockwise
 }
@@ -220,22 +216,21 @@ function rotationMatrixZ(theta) {
 
 // create rotation matrix
 function getRotationMatrix(xAngle, yAngle, zAngle){
-    let thetaX = radians(xAngle);
-    let thetaY = radians(yAngle);
-    let thetaZ = radians(zAngle);
+    const thetaX = radians(xAngle);
+    const thetaY = radians(yAngle);
+    const thetaZ = radians(zAngle);
 
     // Rotation matrices
-    let Rx = rotationMatrixX(thetaX);
-    let Ry = rotationMatrixY(thetaY);
-    let Rz = rotationMatrixZ(thetaZ);
+    const Rx = rotationMatrixX(thetaX);
+    const Ry = rotationMatrixY(thetaY);
+    const Rz = rotationMatrixZ(thetaZ);
     // Combined rotation matrix Rz * Ry * Rx
-    let R = multiplyMatrices(multiplyMatrices(Rz, Ry), Rx);
-    return R;
+    return multiplyMatrices(multiplyMatrices(Rz, Ry), Rx);
 }
 
 // Function to multiply two matrices
 function multiplyMatrices(a, b) {
-    let result = [];
+    const result = [];
     for (let i = 0; i < a.length; i++) {
         result[i] = [];
         for (let j = 0; j < b[0].length; j++) {
@@ -276,8 +271,8 @@ p5.Vector.prototype.vectorToPerspective = function(){
 
 // Function to rotate a point using a rotation matrix
 p5.Vector.prototype.pointRotate = function(rotationMatrix) {
-    let point = [this.x, this.y, this.z];
-    let result = [];
+    const point = [this.x, this.y, this.z];
+    const result = [];
     for (let i = 0; i < rotationMatrix.length; i++) {
         result[i] = 0;
         for (let j = 0; j < point.length; j++) {

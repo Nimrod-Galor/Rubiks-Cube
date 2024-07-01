@@ -78,7 +78,6 @@ function isPointInPolygon(x, y, vertices) {
         let vpi = pointToPerspective(vertices[i]);
         let vpj = pointToPerspective(vertices[j]);
 
-
         let xi = vpi[0], yi = vpi[1];
         let xj = vpj[0], yj = vpj[1];
 
@@ -89,17 +88,3 @@ function isPointInPolygon(x, y, vertices) {
 
     return inside;
 }
-
-
-
-
-// function isVectorFacingCamers(normal) {
-//     // face normal vector
-//     let v1 = pointToVector(normal);//createVector(normal[0], normal[1], normal[2]);
-    
-//     // Compute the dot product of the normal and the vector from the camera to the vertex
-//     const dotProduct = v1.dot(cameraPosition);
-
-//     // If the dot product is positive, the triangle is facing the camera
-//     return dotProduct < 0;
-// }
