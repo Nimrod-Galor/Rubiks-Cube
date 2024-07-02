@@ -97,33 +97,33 @@ function mouseDragged() {
                             }
                         }
 
-                        // if(intersectAngleY === 180 || intersectAngleY === 0){
-                        //     // y axis
-                        //     cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                        //     cube.planeCutRotaionMagnitude *= intersectAngleX > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
-                        //     cube.planeCutRotationAxis = cube.normalY;
-                        //     if(selectedFace.hierarchy.y === 0){
-                        //         cube.faceCutType = 'top';
-                        //     }else if(selectedFace.hierarchy.y === cube.dimantion - 1){
-                        //         cube.faceCutType = 'bottom';
-                        //     }else{
-                        //         cube.faceCutType = '';
-                        //     }
-                        // }
+                        if(Math.abs(intersectAngleY) === 180 || Math.abs(intersectAngleY) === 0){
+                            // y axis
+                            cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
+                            cube.planeCutRotaionMagnitude *= Math.abs(intersectAngleY) <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotationAxis = cube.normalY;
+                            if(selectedFace.hierarchy.y === 0){
+                                cube.faceCutType = 'top';
+                            }else if(selectedFace.hierarchy.y === cube.dimantion - 1){
+                                cube.faceCutType = 'bottom';
+                            }else{
+                                cube.faceCutType = '';
+                            }
+                        }
 
-                        // if(intersectAngleZ === 180 || intersectAngleZ === 0){
-                        //     // z axis
-                        //     cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                        //     cube.planeCutRotaionMagnitude *= intersectAngleX > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
-                        //     cube.planeCutRotationAxis = cube.normalZ;
-                        //     if(selectedFace.hierarchy.z === 0){
-                        //         cube.faceCutType = 'back';
-                        //     }else if(selectedFace.hierarchy.z === cube.dimantion - 1){
-                        //         cube.faceCutType = 'front';
-                        //     }else{
-                        //         cube.faceCutType = '';
-                        //     }
-                        // }
+                        if(Math.abs(intersectAngleZ) === 180 || Math.abs(intersectAngleZ) === 0){
+                            // z axis
+                            cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
+                            cube.planeCutRotaionMagnitude *= Math.abs(intersectAngleZ) <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotationAxis = cube.normalZ;
+                            if(selectedFace.hierarchy.z === 0){
+                                cube.faceCutType = 'back';
+                            }else if(selectedFace.hierarchy.z === cube.dimantion - 1){
+                                cube.faceCutType = 'front';
+                            }else{
+                                cube.faceCutType = '';
+                            }
+                        }
 
                         return;
                     }
