@@ -75,18 +75,18 @@ function mouseDragged() {
                     // check if mouse vector intersect face line
                     if(doLinesIntersect(p1, extendedP2, l1, l2)){
                         let intersectVec = p5.Vector.sub(l1, l2);
-                        let intersectAngleX = roundBase(degrees(cube.normalX.angleBetween(intersectVec)), 45);
-                        let intersectAngleY = roundBase(degrees(cube.normalY.angleBetween(intersectVec)), 45);
-                        let intersectAngleZ = roundBase(degrees(cube.normalZ.angleBetween(intersectVec)), 45);
+                        let intersectAngleX = Math.abs(roundBase(degrees(cube.normalX.angleBetween(intersectVec)), 45));
+                        let intersectAngleY = Math.abs(roundBase(degrees(cube.normalY.angleBetween(intersectVec)), 45));
+                        let intersectAngleZ = Math.abs(roundBase(degrees(cube.normalZ.angleBetween(intersectVec)), 45));
 
-                        console.log("normal x", intersectAngleX);
-                        console.log("normal y", intersectAngleY);
-                        console.log("normal z", intersectAngleZ);
+                        // console.log("normal x", intersectAngleX);
+                        // console.log("normal y", intersectAngleY);
+                        // console.log("normal z", intersectAngleZ);
 
-                        if(Math.abs(intersectAngleX) === 180 || intersectAngleX === 0){
+                        if(intersectAngleX === 180 || intersectAngleX === 0){
                             // x axis
                             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                            cube.planeCutRotaionMagnitude *= Math.abs(intersectAngleX) <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotaionMagnitude *= intersectAngleX <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.planeCutRotationAxis = cube.normalX;
                             if(selectedFace.hierarchy.x === 0){
                                 cube.faceCutType = 'left';
@@ -97,10 +97,10 @@ function mouseDragged() {
                             }
                         }
 
-                        if(Math.abs(intersectAngleY) === 180 || Math.abs(intersectAngleY) === 0){
+                        if(intersectAngleY === 180 || intersectAngleY === 0){
                             // y axis
                             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                            cube.planeCutRotaionMagnitude *= Math.abs(intersectAngleY) <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotaionMagnitude *= intersectAngleY <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.planeCutRotationAxis = cube.normalY;
                             if(selectedFace.hierarchy.y === 0){
                                 cube.faceCutType = 'top';
@@ -111,10 +111,10 @@ function mouseDragged() {
                             }
                         }
 
-                        if(Math.abs(intersectAngleZ) === 180 || Math.abs(intersectAngleZ) === 0){
+                        if(intersectAngleZ === 180 || intersectAngleZ === 0){
                             // z axis
                             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                            cube.planeCutRotaionMagnitude *= Math.abs(intersectAngleZ) <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotaionMagnitude *= intersectAngleZ <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.planeCutRotationAxis = cube.normalZ;
                             if(selectedFace.hierarchy.z === 0){
                                 cube.faceCutType = 'back';
