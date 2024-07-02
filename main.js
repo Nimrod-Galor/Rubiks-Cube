@@ -75,18 +75,18 @@ function mouseDragged() {
                     // check if mouse vector intersect face line
                     if(doLinesIntersect(p1, extendedP2, l1, l2)){
                         let intersectVec = p5.Vector.sub(l1, l2);
-                        let angleX = roundBase(degrees(cube.normalX.angleBetween(intersectVec)), 45);
-                        let angleY = roundBase(degrees(cube.normalY.angleBetween(intersectVec)), 45);
-                        let angleZ = roundBase(degrees(cube.normalZ.angleBetween(intersectVec)), 45);
-                        console.log("normal x", angleX);
-                        console.log("normal y", angleY);
-                        console.log("normal z", angleZ);
+                        let intersectAngleX = roundBase(degrees(cube.normalX.angleBetween(intersectVec)), 45);
+                        let intersectAngleY = roundBase(degrees(cube.normalY.angleBetween(intersectVec)), 45);
+                        let intersectAngleZ = roundBase(degrees(cube.normalZ.angleBetween(intersectVec)), 45);
 
-                        if(Math.abs(angleX) === 180 || Math.abs(angleX) === 0){
-                            console.log("IN");
+                        console.log("normal x", intersectAngleX);
+                        console.log("normal y", intersectAngleY);
+                        console.log("normal z", intersectAngleZ);
+
+                        if(Math.abs(intersectAngleX) === 180 || intersectAngleX === 0){
                             // x axis
                             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                            cube.planeCutRotaionMagnitude *= angleY < 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                            cube.planeCutRotaionMagnitude *= Math.abs(intersectAngleX) <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.planeCutRotationAxis = cube.normalX;
                             if(selectedFace.hierarchy.x === 0){
                                 cube.faceCutType = 'left';
@@ -97,33 +97,33 @@ function mouseDragged() {
                             }
                         }
 
-                        if(Math.abs(angleY) === 180 || Math.abs(angleY) === 0){
-                            // y axis
-                            cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                            cube.planeCutRotaionMagnitude *= angleX > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
-                            cube.planeCutRotationAxis = cube.normalY;
-                            if(selectedFace.hierarchy.y === 0){
-                                cube.faceCutType = 'top';
-                            }else if(selectedFace.hierarchy.y === cube.dimantion - 1){
-                                cube.faceCutType = 'bottom';
-                            }else{
-                                cube.faceCutType = '';
-                            }
-                        }
+                        // if(intersectAngleY === 180 || intersectAngleY === 0){
+                        //     // y axis
+                        //     cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
+                        //     cube.planeCutRotaionMagnitude *= intersectAngleX > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                        //     cube.planeCutRotationAxis = cube.normalY;
+                        //     if(selectedFace.hierarchy.y === 0){
+                        //         cube.faceCutType = 'top';
+                        //     }else if(selectedFace.hierarchy.y === cube.dimantion - 1){
+                        //         cube.faceCutType = 'bottom';
+                        //     }else{
+                        //         cube.faceCutType = '';
+                        //     }
+                        // }
 
-                        if(Math.abs(angleZ) === 180 || Math.abs(angleZ) === 0){
-                            // z axis
-                            cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                            cube.planeCutRotaionMagnitude *= angleX > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
-                            cube.planeCutRotationAxis = cube.normalZ;
-                            if(selectedFace.hierarchy.z === 0){
-                                cube.faceCutType = 'back';
-                            }else if(selectedFace.hierarchy.z === cube.dimantion - 1){
-                                cube.faceCutType = 'front';
-                            }else{
-                                cube.faceCutType = '';
-                            }
-                        }
+                        // if(intersectAngleZ === 180 || intersectAngleZ === 0){
+                        //     // z axis
+                        //     cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
+                        //     cube.planeCutRotaionMagnitude *= intersectAngleX > 1 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
+                        //     cube.planeCutRotationAxis = cube.normalZ;
+                        //     if(selectedFace.hierarchy.z === 0){
+                        //         cube.faceCutType = 'back';
+                        //     }else if(selectedFace.hierarchy.z === cube.dimantion - 1){
+                        //         cube.faceCutType = 'front';
+                        //     }else{
+                        //         cube.faceCutType = '';
+                        //     }
+                        // }
 
                         return;
                     }
@@ -216,10 +216,10 @@ function rotationMatrixZ(theta) {
 
 
 // create rotation matrix
-function getRotationMatrix(xAngle, yAngle, zAngle){
-    const thetaX = radians(xAngle);
-    const thetaY = radians(yAngle);
-    const thetaZ = radians(zAngle);
+function getRotationMatrix(xintersectAngle, yintersectAngle, zintersectAngle){
+    const thetaX = radians(xintersectAngle);
+    const thetaY = radians(yintersectAngle);
+    const thetaZ = radians(zintersectAngle);
 
     // Rotation matrices
     const Rx = rotationMatrixX(thetaX);

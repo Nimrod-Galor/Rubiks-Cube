@@ -37,7 +37,7 @@ class Cube{
                     let mz = (z * this.cubieSize - R) + (this.cubieSize * 0.5);
                     if(z === 0){                    // back face
                         let f = new Face('back', 3, hierarchy);
-                        f.normal.z = -1;
+                        f.rotateFace(0, 180, 0);
                         let mz = -R;
                         f.moveFace(mx, my, mz);
                         this.faces.push(f);
