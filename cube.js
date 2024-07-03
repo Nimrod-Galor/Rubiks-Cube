@@ -166,9 +166,9 @@ class Cube{
             //convert plane array to matrix
             let faceMatrix = [];
             let index = 0;
-            for(let r = 0; r <= 2; r++){
+            for(let r = 0; r < this.dimantion; r++){
                 faceMatrix[r] = [];
-                for(let c = 0; c <= 2; c++){
+                for(let c = 0; c < this.dimantion; c++){
                     faceMatrix[r][c] = faceCut[index].colorIndex;
                     index++;
                 }
@@ -178,8 +178,8 @@ class Cube{
 
             // update colors
             index = 0;
-            for(let r = 0; r <= 2; r++){
-                for(let c = 0; c <= 2; c++){
+            for(let r = 0; r < this.dimantion; r++){
+                for(let c = 0; c < this.dimantion; c++){
                     // update face plane cubie colors
                     faceCut[index].colorIndex = faceMatrix[r][c];
                     index++;
