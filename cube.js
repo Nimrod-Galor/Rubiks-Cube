@@ -166,10 +166,10 @@ class Cube{
             //remove face cut from plane cut
             this.planeCut = this.planeCut.filter(f => f.type !== this.faceCutType);
         }
-
+// console.log('normalZ', this.normalZ == this.planeCutRotationAxis);
         // rotate plane colors
         let modArr;
-        if(this.planeCutRotaionMagnitude <= 0){
+        if((this.planeCutRotaionMagnitude <= 0 && this.normalZ != this.planeCutRotationAxis) || (this.planeCutRotaionMagnitude >= 0 && this.normalZ == this.planeCutRotationAxis)){
             let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimantion)));
             let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(-this.dimantion)));
             modArr = [...endItems, ...startItems];
