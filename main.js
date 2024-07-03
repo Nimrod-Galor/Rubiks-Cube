@@ -85,6 +85,7 @@ function mouseDragged() {
 
                         if(intersectAngleX === 180 || intersectAngleX === 0){
                             // x axis
+                            console.log("rotate X axis");
                             cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
                             cube.planeCutRotaionMagnitude *= intersectAngleX <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.planeCutRotationAxis = cube.normalX;
@@ -99,6 +100,7 @@ function mouseDragged() {
 
                         if(intersectAngleY === 180 || intersectAngleY === 0){
                             // y axis
+                            console.log("rotate Y axis");
                             cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
                             cube.planeCutRotaionMagnitude *= intersectAngleY <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.planeCutRotationAxis = cube.normalY;
@@ -113,6 +115,7 @@ function mouseDragged() {
 
                         if(intersectAngleZ === 180 || intersectAngleZ === 0){
                             // z axis
+                            console.log("rotate Z axis");
                             cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
                             cube.planeCutRotaionMagnitude *= intersectAngleZ <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.planeCutRotationAxis = cube.normalZ;

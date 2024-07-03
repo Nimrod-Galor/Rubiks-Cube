@@ -86,8 +86,28 @@ class Cube{
             }
         }
         // sort faces by face type
-        let sortingTable = {'top' : 1, 'back' : 2, 'left' : 3, 'bottom': 4, 'front' : 5, 'right' : 6};
-        this.faces.sort((a, b) => sortingTable[a.type] - sortingTable[b.type]);
+        // let sortingTable = {'top' : 1, 'back' : 2, 'left' : 3, 'bottom': 4, 'front' : 5, 'right' : 6};
+        let sortingTable = {'front' : 1, 'top' : 2, 'right' : 3, 'back' : 4, 'bottom': 5, 'left' : 6};
+        // this.faces.sort((a, b) => sortingTable[a.type] - sortingTable[b.type]);
+
+        this.faces.sort((a, b) => {
+            if(a.type != b.type){
+                return sortingTable[a.type] - sortingTable[b.type];
+            }else{
+                if(a.hierarchy.z === b.hierarchy.z){
+                    if(a.hierarchy.x == b.hierarchy.x){
+                        return (a.type == 'right' || a.type == 'front') ? a.hierarchy.y - b.hierarchy.y : b.hierarchy.y - a.hierarchy.y;
+                    }else{
+                        return (a.type == 'top' || a.type == 'front') ? a.hierarchy.x - b.hierarchy.x : b.hierarchy.x - a.hierarchy.x;
+                    }
+                }else{
+                    return (a.type == 'top' || a.type == 'right') ? a.hierarchy.z - b.hierarchy.z : b.hierarchy.z - a.hierarchy.z;
+                }
+            }
+        });
+
+
+
     }
 
     render(){
@@ -169,19 +189,43 @@ class Cube{
 // console.log('normalZ', this.normalZ == this.planeCutRotationAxis);
         // rotate plane colors
         let modArr;
-        if((this.planeCutRotaionMagnitude <= 0 && this.normalZ != this.planeCutRotationAxis) || (this.planeCutRotaionMagnitude >= 0 && this.normalZ == this.planeCutRotationAxis)){
+        // if((this.planeCutRotaionMagnitude <= 0 && this.normalZ != this.planeCutRotationAxis) || (this.planeCutRotaionMagnitude >= 0 && this.normalZ == this.planeCutRotationAxis)){
+        if(this.planeCutRotaionMagnitude <= 0){
             let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimantion)));
             let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(-this.dimantion)));
+            // for(let i = 0; i < endItems.length; i++){
+            //     endItems[i].colorIndex = 6;
+            // }
             modArr = [...endItems, ...startItems];
         }else{
             let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, this.dimantion)));
             let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(this.dimantion)));
+            // for(let i = 0; i < startItems.length; i++){
+            //     startItems[i].colorIndex = 6;
+            // }
             modArr = [...endItems, ...startItems];
         }
         // update plane colors
+        // for(let i = 0; i < this.planeCut.length; i++){
+        //     this.planeCut[i].colorIndex = modArr[i].colorIndex;
+        // }
+
+        // let reversFaces = (this.normalX != this.planeCutRotationAxis && this.planeCutRotaionMagnitude <= 0) || (this.normalX == this.planeCutRotationAxis && this.planeCutRotaionMagnitude >= 0);//(this.normalX == this.planeCutRotationAxis);
+        // let faceIndex = this.dimantion;
         for(let i = 0; i < this.planeCut.length; i++){
+        //     if(faceIndex == 0){
+        //         if(reversFaces){
+        //             let rev = modArr.splice(i, this.dimantion);
+        //             modArr.splice(i, 0, ...rev.reverse());
+        //         }
+        //         reversFaces = !reversFaces;
+        //         faceIndex = this.dimantion;
+        //     }
             this.planeCut[i].colorIndex = modArr[i].colorIndex;
+        //     faceIndex--;
         }
+
+
 
         // reset cut
         this.planeCut = [];
