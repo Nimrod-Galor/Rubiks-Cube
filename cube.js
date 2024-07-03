@@ -24,8 +24,8 @@ class Cube{
         this.planeCutRotaionDone = 0;
         this.faceCutType = '';
 
-        this.cutBefore = [];
-        this.cutAfter = [];
+        // this.cutBefore = [];
+        // this.cutAfter = [];
     }
 
     initFaces(){
@@ -123,7 +123,7 @@ class Cube{
             }
             
         }
-        this.printCut();
+        // this.printCut();
 
         for(let i = 0 ; i < this.faces.length; i++){
             if(this.faces[i].isVisible){// render only visible faces
@@ -174,8 +174,8 @@ class Cube{
                 }
             }
             // rotate matrix
-            faceMatrix = this.planeCutRotaionMagnitude >= 0 ? faceMatrix[0].map((val, index) => faceMatrix.map(row => row[index]).reverse()) : faceMatrix[0].map((val, index) => faceMatrix.map(row => row[row.length-1-index]));
-//&& this.planeCutRotationAxis.y == 0 
+            faceMatrix = this.planeCutRotaionMagnitude >= 0 && this.planeCutRotationAxis != this.normalX || this.planeCutRotaionMagnitude <= 0 && this.planeCutRotationAxis == this.normalX ? faceMatrix[0].map((val, index) => faceMatrix.map(row => row[index]).reverse()) : faceMatrix[0].map((val, index) => faceMatrix.map(row => row[row.length-1-index]));
+
             // update colors
             index = 0;
             for(let r = 0; r <= 2; r++){
@@ -189,7 +189,7 @@ class Cube{
             //remove face cut from plane cut
             this.planeCut = this.planeCut.filter(f => f.type !== this.faceCutType);
         }
-// console.log('normalZ', this.normalZ == this.planeCutRotationAxis);
+
         // rotate plane colors
         let modArr;
         
@@ -197,41 +197,26 @@ class Cube{
         if(this.planeCutRotaionMagnitude <= 0){
             let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimantion)));
             let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(-this.dimantion)));
-            // for(let i = 0; i < endItems.length; i++){
-            //     endItems[i].colorIndex = 6;
-            // }
             modArr = [...endItems, ...startItems];
         }else{
             let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, this.dimantion)));
             let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(this.dimantion)));
-            // for(let i = 0; i < startItems.length; i++){
-            //     startItems[i].colorIndex = 6;
-            // }
             modArr = [...endItems, ...startItems];
         }
-        // update plane colors
-        // for(let i = 0; i < this.planeCut.length; i++){
-        //     this.planeCut[i].colorIndex = modArr[i].colorIndex;
-        // }
 
-        // let reversFaces = (this.normalX != this.planeCutRotationAxis && this.planeCutRotaionMagnitude <= 0) || (this.normalX == this.planeCutRotationAxis && this.planeCutRotaionMagnitude >= 0);//(this.normalX == this.planeCutRotationAxis);
-        // let reversFaces = this.planeCutRotaionMagnitude <= 0;
         let faceIndex = 0;
-
-        this.cutBefore = JSON.parse(JSON.stringify(this.planeCut));
+        // this.cutBefore = JSON.parse(JSON.stringify(this.planeCut));
         for(let i = 0; i < this.planeCut.length; i++){
             if(faceIndex == 0 && this.normalY == this.planeCutRotationAxis){
-                // if(reversFaces){
-                    let rev = modArr.splice(i, this.dimantion);
-                    modArr.splice(i, 0, ...rev.reverse());
-                // }
-                // reversFaces = !reversFaces;
+                // whene rotating on Y axis we need to flip left and right face cubies order
+                let rev = modArr.splice(i, this.dimantion);
+                modArr.splice(i, 0, ...rev.reverse());
                 faceIndex = this.dimantion;
             }
             this.planeCut[i].colorIndex = modArr[i].colorIndex;
             faceIndex--;
         }
-        this.cutAfter = JSON.parse(JSON.stringify(this.planeCut));
+        // this.cutAfter = JSON.parse(JSON.stringify(this.planeCut));
         
         // reset cut
         this.planeCut = [];
@@ -239,19 +224,19 @@ class Cube{
         this.planeCutRotaionDone = 0;
     }
 
-    printCut(){
-        push();
-        for(let i = 0; i < this.cutAfter.length; i++){
-            fill(this.colors[this.cutBefore[i].colorIndex]);
-            rect(-380 + 25 * i, -380, 20, 20);
-        }
+    // printCut(){
+    //     push();
+    //     for(let i = 0; i < this.cutAfter.length; i++){
+    //         fill(this.colors[this.cutBefore[i].colorIndex]);
+    //         rect(-380 + 25 * i, -380, 20, 20);
+    //     }
 
-        for(let i = 0; i < this.cutAfter.length; i++){
-            fill(this.colors[this.cutAfter[i].colorIndex]);
-            rect(-380 + 25 * i, -300, 20, 20);
-        }
-        pop();
-    }
+    //     for(let i = 0; i < this.cutAfter.length; i++){
+    //         fill(this.colors[this.cutAfter[i].colorIndex]);
+    //         rect(-380 + 25 * i, -300, 20, 20);
+    //     }
+    //     pop();
+    // }
 
     detectFaceClicked(x, y){
         for(let i = 0; i < this.faces.length; i++){
