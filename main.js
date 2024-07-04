@@ -40,7 +40,8 @@ function draw() {
 function mousePressed(){
     mouseStartX = mouseX;
     mouseStartY = mouseY;
-    cube.detectFaceClicked(fixPosition(mouseX), fixPosition(mouseY));
+    cube.detectFaceClicked(fixPositionWidth(mouseX), fixPositionHeight(mouseY));
+    // console.log('mouseX', mouseX, 'fix x', fixPositionWidth(mouseX), 'mouseY', mouseY, 'fix y', fixPositionHeight(mouseY));
 }
 
 function mouseReleased(){
@@ -65,9 +66,9 @@ function mouseDragged() {
             // dont start rotation befor mouse movement min 10px
             if(Math.abs(x) > 10 || Math.abs(y) > 10){
                 // mouse start point
-                let p1 = {x : fixPosition(mouseStartX), y : fixPosition(mouseStartY), z : 0};
+                let p1 = {x : fixPositionWidth(mouseStartX), y : fixPositionHeight(mouseStartY), z : 0};
                 // mouse end point
-                let p2 = {x : fixPosition(mouseX), y : fixPosition(mouseY), z : 0};
+                let p2 = {x : fixPositionWidth(mouseX), y : fixPositionHeight(mouseY), z : 0};
                 // extend mouse end
                 const extendedP2 = extendVector(p1, p2);
                 const selectedFace = cube.faces[cube.selectedFaceId];
@@ -140,17 +141,6 @@ function mouseDragged() {
             }
         }
     }
-}
-
-function printWebglVersion(){
-    // Display the current WebGL version.
-    fill(0);
-    textFont(font);
-    text(webglVersion, width * 0.5 - 100, height * 0.5 - 25);
-}
-
-function fixPosition(num){
-    return (num - (width * 0.5));
 }
 
 // Function to check if two lines intersect
@@ -307,8 +297,22 @@ function roundBase(num, base){
     return p + b;
 }
 
-// Resize the canvas when the
-// browser's size changes.
+// Resize the canvas when the browser's size changes.
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+}
+
+function printWebglVersion(){
+    // Display the current WebGL version.
+    fill(0);
+    textFont(font);
+    text(webglVersion, width * 0.5 - 100, height * 0.5 - 25);
+}
+
+function fixPositionWidth(num){
+    return (num - (width * 0.5));
+}
+
+function fixPositionHeight(num){
+    return (num - (height * 0.5));
 }
