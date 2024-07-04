@@ -4,7 +4,7 @@ class Cube{
         this.cubieSize = cubieSize;
         this.faces = [];
         this.colors = [
-            color(255, 255, 255), // 0 top white
+            color(255, 255, 255),   // 0 top white
             color(255, 0, 0),       // 1 front red
             color(0, 0, 255),       // 2 right blue
             color(255, 150, 0),     // 3 back orange
@@ -13,19 +13,16 @@ class Cube{
             color(51)               // test
         ];
         this.normalX = createVector(1, 0, 0);
-        this.normalY = createVector(0, 1, 0);
+        this.normalY = createVector(0, -1, 0);
         this.normalZ = createVector(0, 0, 1);
         
         this.cubeRotate = false;
-        this.cutRotate = false;
+        // this.cutRotate = false;
         this.planeCut = [];
         this.planeCutRotationAxis = createVector(0, 0, 0);
         this.planeCutRotaionMagnitude = radians(5);
         this.planeCutRotaionDone = 0;
         this.faceCutType = '';
-
-        // this.cutBefore = [];
-        // this.cutAfter = [];
     }
 
     initFaces(){
@@ -89,10 +86,7 @@ class Cube{
             }
         }
         // sort faces by face type
-        // let sortingTable = {'top' : 1, 'back' : 2, 'left' : 3, 'bottom': 4, 'front' : 5, 'right' : 6};
         let sortingTable = {'front' : 1, 'top' : 2, 'right' : 3, 'back' : 4, 'bottom': 5, 'left' : 6};
-        // this.faces.sort((a, b) => sortingTable[a.type] - sortingTable[b.type]);
-
         this.faces.sort((a, b) => {
             if(a.type != b.type){
                 return sortingTable[a.type] - sortingTable[b.type];
@@ -108,22 +102,18 @@ class Cube{
                 }
             }
         });
-
-
-
     }
 
     render(){
         if(this.planeCut.length > 0){
             this.rotateCutPlane(this.planeCutRotaionMagnitude);
             this.planeCutRotaionDone += this.planeCutRotaionMagnitude;
-            //console.log(degrees(this.planeCutRotaionDone));
+
             if(Math.abs(degrees(this.planeCutRotaionDone)) >= 89){
                 this.finalizeCutPlane();
             }
             
         }
-        // this.printCut();
 
         for(let i = 0 ; i < this.faces.length; i++){
             if(this.faces[i].isVisible){// render only visible faces
@@ -160,7 +150,6 @@ class Cube{
         this.rotateCutPlane(this.planeCutRotaionDone * -1);
         // update face colors
         if(this.faceCutType != ''){
-            console.log('faceCutType', this.faceCutType);
             //extract face plane
             let faceCut = this.planeCut.filter(f => f.type === this.faceCutType);
             //convert plane array to matrix
@@ -192,8 +181,7 @@ class Cube{
 
         // rotate plane colors
         let modArr;
-        
-        // if((this.planeCutRotaionMagnitude <= 0 && this.normalZ != this.planeCutRotationAxis) || (this.planeCutRotaionMagnitude >= 0 && this.normalZ == this.planeCutRotationAxis)){
+
         if(this.planeCutRotaionMagnitude <= 0){
             let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimantion)));
             let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(-this.dimantion)));
@@ -205,7 +193,6 @@ class Cube{
         }
 
         let faceIndex = 0;
-        // this.cutBefore = JSON.parse(JSON.stringify(this.planeCut));
         for(let i = 0; i < this.planeCut.length; i++){
             if(faceIndex == 0 && this.normalY == this.planeCutRotationAxis){
                 // whene rotating on Y axis we need to flip left and right face cubies order
@@ -216,27 +203,12 @@ class Cube{
             this.planeCut[i].colorIndex = modArr[i].colorIndex;
             faceIndex--;
         }
-        // this.cutAfter = JSON.parse(JSON.stringify(this.planeCut));
-        
+
         // reset cut
         this.planeCut = [];
-        this.cutRotate = false;
+        // this.cutRotate = false;
         this.planeCutRotaionDone = 0;
     }
-
-    // printCut(){
-    //     push();
-    //     for(let i = 0; i < this.cutAfter.length; i++){
-    //         fill(this.colors[this.cutBefore[i].colorIndex]);
-    //         rect(-380 + 25 * i, -380, 20, 20);
-    //     }
-
-    //     for(let i = 0; i < this.cutAfter.length; i++){
-    //         fill(this.colors[this.cutAfter[i].colorIndex]);
-    //         rect(-380 + 25 * i, -300, 20, 20);
-    //     }
-    //     pop();
-    // }
 
     detectFaceClicked(x, y){
         for(let i = 0; i < this.faces.length; i++){

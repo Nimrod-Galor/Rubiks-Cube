@@ -25,7 +25,7 @@ function setup() {
     let cubieSize = Math.ceil(300 / cubeDimantion);
     cube = new Cube(cubeDimantion, cubieSize); //cubeDimantion, cubieSize
     cube.initFaces();
-    // cube.rotateCube(-45, 45, -35);
+    cube.rotateCube(-45, 45, -35);
 }
   
 
@@ -59,7 +59,7 @@ function mouseDragged() {
         test = [];
         cube.rotateCube(x * rotationSpeed, y * -rotationSpeed, 0);
     }else{// rotate plane
-        cube.cutRotate = true;
+        // cube.cutRotate = true;
         if(cube.planeCut.length === 0){
             let x = mouseStartX -  mouseX;
             let y = mouseStartY - mouseY;

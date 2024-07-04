@@ -14,7 +14,7 @@ class Face{
     }
 
     rotateFace(xAngle, yAngle, zAngle){
-        let rotationMatrix = getRotationMatrix(xAngle, yAngle, zAngle);
+        const rotationMatrix = getRotationMatrix(xAngle, yAngle, zAngle);
         // Rotate each vertex
         for(let i =0 ; i < this.vertices.length; i++){
             this.vertices[i].pointRotate(rotationMatrix);
@@ -34,8 +34,7 @@ class Face{
 
     isFacingCamers() {
         // Calculate the dot product of the normal vector and the camera's forward vector
-        let dot = this.normal.dot(cameraPosition);
-    
+        const dot = this.normal.dot(cameraPosition);
         // If the dot product is positive, the triangle is facing the camera
         this.isVisible = (dot < -0.19);
     }
@@ -69,15 +68,14 @@ function isPointInPolygon(x, y, vertices) {
 
     for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
         // calculate point perspective
-        let vpi = vertices[i].pointToPerspective();
-        let vpj = vertices[j].pointToPerspective();
+        const vpi = vertices[i].pointToPerspective();
+        const vpj = vertices[j].pointToPerspective();
 
-        let xi = vpi.x, yi = vpi.y;
-        let xj = vpj.x, yj = vpj.y;
+        const xi = vpi.x, yi = vpi.y;
+        const xj = vpj.x, yj = vpj.y;
 
-        let intersect = ((yi > y) !== (yj > y)) &&
-            (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
+        const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) {inside = !inside};
     }
 
     return inside;
