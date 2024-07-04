@@ -9,7 +9,7 @@ var mouseStartX = 0;
 var mouseStartY = 0;
 
 function setup() {
-    createCanvas(800, 800, WEBGL);
+    createCanvas(windowWidth, windowHeight, WEBGL);
 
     cam = createCamera();
     cam.setPosition(0, 0, camFov);
@@ -25,6 +25,7 @@ function setup() {
 
 
 function draw() {
+    
     // set background color
     background(200);
 
