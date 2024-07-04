@@ -25,7 +25,7 @@ function setup() {
     let cubieSize = Math.ceil(300 / cubeDimantion);
     cube = new Cube(cubeDimantion, cubieSize); //cubeDimantion, cubieSize
     cube.initFaces();
-    cube.rotateCube(-45, 45, -35);
+    // cube.rotateCube(-45, 45, -35);
 }
   
 
@@ -33,6 +33,7 @@ function setup() {
 function draw() {
     // set background color
     background(200);
+    printCubeOrientation();
     printWebglVersion();
     cube.render();
 }
@@ -70,7 +71,7 @@ function mouseDragged() {
                 // mouse end point
                 let p2 = {x : fixPositionWidth(mouseX), y : fixPositionHeight(mouseY), z : 0};
                 // extend mouse end
-                const extendedP2 = extendVector(p1, p2);
+                const extendedP2 = extendVector(p1, p2, 1000000);
                 const selectedFace = cube.faces[cube.selectedFaceId];
                 const vertices = selectedFace.vertices;
                 const faceHierarchy = selectedFace.hierarchy;
@@ -181,15 +182,15 @@ function onSegment(a, b, c) {
 }
 
 // Function to extend the vector into an infinite line
-function extendVector(p1, p2) {
+function extendVector(p1, p2, magnitude) {
     // Assume the vector is extended to a very large distance
-    const largeValue = 1000000;
+    // const magnitude = 1000000;
     const directionX = p2.x - p1.x;
     const directionY = p2.y - p1.y;
 
     return {
-        x: p1.x + directionX * largeValue,
-        y: p1.y + directionY * largeValue
+        x: p1.x + directionX * magnitude,
+        y: p1.y + directionY * magnitude
     };
 }
 
@@ -302,17 +303,48 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
 
-function printWebglVersion(){
-    // Display the current WebGL version.
-    fill(0);
-    textFont(font);
-    text(webglVersion, width * 0.5 - 100, height * 0.5 - 25);
-}
-
 function fixPositionWidth(num){
     return (num - (width * 0.5));
 }
 
 function fixPositionHeight(num){
     return (num - (height * 0.5));
+}
+
+// Draws an arrow between two vectors.
+function drawArrow(base, vec, myColor) {
+    push();
+    stroke(myColor);
+    strokeWeight(3);
+    fill(myColor);
+    translate(base.x, base.y);
+    line(0, 0, vec.x, vec.y);
+    rotate(vec.heading());
+    let arrowSize = 7;
+    translate(vec.mag() - arrowSize, 0);
+    triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+    pop();
+}
+
+function printWebglVersion(){
+    // Display the current WebGL version.
+    fill(0);
+    textFont(font);
+    text(webglVersion, width * 0.5 - 75, height * 0.5 - 15);
+}
+
+function printCubeOrientation(){
+    let originVec = createVector(width * 0.5 - 100, height * 0.5 - 100, 0);
+    // vec X
+    let vecX = extendVector({x:0,y:0}, cube.normalX, 50);
+    drawArrow(originVec, createVector(vecX.x, vecX.y, 0), 'blue');
+
+    // vec Y
+    let vecY = extendVector({x:0,y:0}, cube.normalY, 50);
+    drawArrow(originVec, createVector(vecY.x, vecY.y, 0), 'white');
+
+
+    // vec Z
+    let vecZ = extendVector({x:0,y:0}, cube.normalZ, 50);
+    drawArrow(originVec, createVector(vecZ.x, vecZ.y, 0), 'red');
 }
