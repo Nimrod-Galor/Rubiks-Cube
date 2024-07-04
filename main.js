@@ -26,7 +26,8 @@ function setup() {
     cube = new Cube(cubeDimantion, cubieSize); //cubeDimantion, cubieSize
     cube.initFaces();
     cube.rotateCube(-45, 45, -35);
-    cube.randomShuffle();
+
+    setTimeout(()=>cube.randomShuffle(), 1000);
 }
   
 

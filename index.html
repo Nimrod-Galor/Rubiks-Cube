@@ -12,20 +12,59 @@
         html, body{
             overflow: hidden;
         }
-        /* main {
+        .menuWrapper{
             position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-top: -400px;
-            margin-left: -400px;
-            width: 800px;
-            height: 800px;
-        } */
+            width: 300px;
+            border: 1px solid black;
+            top: 15px;
+            left: 15px;
+        }
+        .menuHeader{
+            background-color: midnightblue;
+        }
+        .closeBtn{
+            margin-left: 92%;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .menuInner{
+            padding: 0 10px 25px;
+        }
+        .menuTitle{
+            border-bottom: 1px solid #000;
+            margin: 15px 0 5px;
+            font-weight: bold;
+        }
     </style>
     <title>Rubiks Cube</title>
 </head>
 <body>
-    
+    <div class="menuWrapper">
+        <div class="menuHeader">
+            <button class="closeBtn"> X</button>
+        </div>
+        <div class="menuInner">
+            <div class="menuTitle">
+                Cube:
+            </div>
+            <lable>Dimention:</lable>
+            <input type="text" id="cubeDimentionInp" value="3" />
+            <button>Update</button>
+
+            <button>Reshuffle</button>
+            <label for="showCubeFlat">Show Cube Flat</label>
+            <input type="checkbox" name="showCubeFlat" id="showCubeFlat">
+
+            <div class="menuTitle">
+                Camera:
+            </div>
+            <label for="fovSlider">Field of view:</label>
+            <input type="range" min="100" max="1000" value="800" class="fovSlider" id="fovSlider">
+
+            <label for="zoomSlider">Zoom:</label>
+            <input type="range" min="100" max="1000" value="800" class="zoomSlider" id="zoomSlider">
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js" integrity="sha512-d6sc8kbZEtA2LwB9m/ck0FhvyUwVfdmvTeyJRprmj7Wg9wRFtHDIpr6qk4g/y3Ix3O9I6KHIv6SGu9f7RaP1Gw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="cube.js"></script>
