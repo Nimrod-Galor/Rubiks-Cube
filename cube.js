@@ -115,9 +115,6 @@ class Cube{
                 this.finalizeCutPlane();
             }
             
-        }else if(this.shuffleIndex > 0){
-            this.randomShuffle();
-            this.shuffleIndex--;
         }
 
         for(let i = 0 ; i < this.faces.length; i++){
@@ -147,9 +144,9 @@ class Cube{
         
         if(axis === 'x'){
             this.planeCutRotationAxis = this.normalX;
-            if(selectedFace.hierarchy[axis] === 0){
+            if(faceHierarchy[axis] === 0){
                 this.faceCutType = 'left';
-            }else if(selectedFace.hierarchy[axis] === this.dimantion - 1){
+            }else if(faceHierarchy[axis] === this.dimantion - 1){
                 this.faceCutType = 'right';
             }else{
                 this.faceCutType = '';
@@ -158,9 +155,9 @@ class Cube{
 
         if(axis === 'y'){
             this.planeCutRotationAxis = this.normalY;
-            if(selectedFace.hierarchy[axis] === 0){
+            if(faceHierarchy[axis] === 0){
                 this.faceCutType = 'top';
-            }else if(selectedFace.hierarchy[axis] === this.dimantion - 1){
+            }else if(faceHierarchy[axis] === this.dimantion - 1){
                 this.faceCutType = 'bottom';
             }else{
                 this.faceCutType = '';
@@ -169,9 +166,9 @@ class Cube{
 
         if(axis === 'z'){
             this.planeCutRotationAxis = this.normalZ;
-            if(selectedFace.hierarchy[axis] === 0){
+            if(faceHierarchy[axis] === 0){
                 this.faceCutType = 'back';
-            }else if(selectedFace.hierarchy[axis] === this.dimantion - 1){
+            }else if(faceHierarchy[axis] === this.dimantion - 1){
                 this.faceCutType = 'front';
             }else{
                 this.faceCutType = '';
@@ -269,10 +266,14 @@ class Cube{
     }
 
     randomShuffle(){
-        this.selectedFaceId = Math.floor(Math.random() * (this.dimantion * this.dimantion));
-        let dir = Math.random() > 0.5 ? 1 : -1;
-        let axis = Math.floor(Math.random() * 3);
-        axis = axis === 0 ? "z" : axis === 1 ? "x" : "y";
-        this.createPlaneCut(axis, dir);
+        for(let i = 0; i < this.shuffleIndex; i++){
+            setTimeout(()=>{
+                this.selectedFaceId = Math.floor(Math.random() * (this.dimantion * this.dimantion * 6));
+                let dir = Math.random() > 0.5 ? 1 : -1;
+                let axis = Math.floor(Math.random() * 3);
+                axis = axis === 0 ? "z" : axis === 1 ? "x" : "y";
+                this.createPlaneCut(axis, dir);
+            }, i * 500);
+        }
     }
 }
