@@ -8,6 +8,12 @@ const rotationSpeed = 0.05;
 var mouseStartX = 0;
 var mouseStartY = 0;
 
+
+function preload() {
+    // Load a font to use.
+    font = loadFont('/Inconsolata_SemiExpanded-Light.ttf');
+}
+
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
 
@@ -25,10 +31,9 @@ function setup() {
 
 
 function draw() {
-    
     // set background color
     background(200);
-
+    printWebglVersion();
     cube.render();
 }
 
@@ -135,6 +140,13 @@ function mouseDragged() {
             }
         }
     }
+}
+
+function printWebglVersion(){
+    // Display the current WebGL version.
+    fill(0);
+    textFont(font);
+    text(webglVersion, width * 0.5 - 100, height * 0.5 - 25);
 }
 
 function fixPosition(num){
@@ -266,14 +278,6 @@ p5.Vector.prototype.rotatePointAroundVector = function(axis, theta) {
     this.z = this.z * cosTheta + crossProduct.z * sinTheta + axis.z * dotProduct * (1 - cosTheta);    
 }
 
-// p5.Vector.prototype.vectorToPerspective = function(){
-//     const scale = camFov / (camFov - this.z);
-//     const x = this.x * scale;
-//     const y = this.y * scale;
-//     const res = {x: x, y: y, z: this.z};
-//     return res;
-// }
-
 // Function to rotate a point using a rotation matrix
 p5.Vector.prototype.pointRotate = function(rotationMatrix) {
     const point = [this.x, this.y, this.z];
@@ -301,4 +305,10 @@ function roundBase(num, base){
     return p;
     const b = num % base > base * 0.5 ? base : 0;
     return p + b;
+}
+
+// Resize the canvas when the
+// browser's size changes.
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
 }
