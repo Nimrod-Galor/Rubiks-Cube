@@ -2,7 +2,7 @@ var cam;
 var cube;
 var cameraPosition;
 var camFov = 800;
-var cubeDimantion = 6;
+var cubeDimantion = 3;
 const rotationSpeed = 0.05;
 
 var mouseStartX = 0;

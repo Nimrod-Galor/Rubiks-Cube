@@ -24,7 +24,7 @@ class Cube{
         this.planeCutRotaionDone = 0;
         this.faceCutType = '';
 
-        this.shuffle = [];
+        this.shuffleIndex = 16;
     }
 
     initFaces(){
@@ -115,6 +115,9 @@ class Cube{
                 this.finalizeCutPlane();
             }
             
+        }else if(this.shuffleIndex > 0){
+            this.randomShuffle();
+            this.shuffleIndex--;
         }
 
         for(let i = 0 ; i < this.faces.length; i++){
@@ -263,5 +266,13 @@ class Cube{
             }
         }
         this.cubeRotate = true;
+    }
+
+    randomShuffle(){
+        this.selectedFaceId = Math.floor(Math.random() * (this.dimantion * this.dimantion));
+        let dir = Math.random() > 0.5 ? 1 : -1;
+        let axis = Math.floor(Math.random() * 3);
+        axis = axis === 0 ? "z" : axis === 1 ? "x" : "y";
+        this.createPlaneCut(axis, dir);
     }
 }
