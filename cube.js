@@ -286,7 +286,7 @@ class Cube{
 
     detectFaceClicked(x, y){
         for(let i = 0; i < this.faces.length; i++){
-            if(this.faces[i].isVisible && isPointInPolygon(x, y, this.faces[i].vertices)){
+            if(this.faces[i].isVisible && this.faces[i].isPointInPolygon(x, y)){
                 // click was inside face
                 this.selectedFaceId = i;
                 this.cubeRotate = false;

@@ -14,7 +14,7 @@ function preload() {
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
-
+    // set camera
     cam = createCamera();
     cam.setPosition(0, 0, camFov);
     ortho();

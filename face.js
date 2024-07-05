@@ -38,6 +38,26 @@ class Face{
         // If the dot product is positive, the triangle is facing the camera
         this.isVisible = (dot < -0.19);
     }
+
+    // Function to check if a point is inside a polygon using ray-casting algorithm
+    isPointInPolygon(x, y) {
+        // let x = pointX, y = pointY;
+        let inside = false;
+
+        for (let i = 0, j = this.vertices.length - 1; i < this.vertices.length; j = i++) {
+            // calculate point perspective
+            const vpi = this.vertices[i].pointToPerspective();
+            const vpj = this.vertices[j].pointToPerspective();
+
+            const xi = vpi.x, yi = vpi.y;
+            const xj = vpj.x, yj = vpj.y;
+
+            const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            if (intersect) {inside = !inside};
+        }
+
+        return inside;
+    }
     
     render(){
         push();
@@ -61,22 +81,3 @@ class Face{
 
 
 
-// Function to check if a point is inside a polygon using ray-casting algorithm
-function isPointInPolygon(x, y, vertices) {
-    // let x = pointX, y = pointY;
-    let inside = false;
-
-    for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
-        // calculate point perspective
-        const vpi = vertices[i].pointToPerspective();
-        const vpj = vertices[j].pointToPerspective();
-
-        const xi = vpi.x, yi = vpi.y;
-        const xj = vpj.x, yj = vpj.y;
-
-        const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) {inside = !inside};
-    }
-
-    return inside;
-}
