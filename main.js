@@ -1,13 +1,11 @@
-var cam;
 var cube;
-var cameraPosition;
-var camFov = 800;
 var cubeDimension = 3;
 const rotationSpeed = 0.05;
-
+var cam;
+var cameraPosition;
+var camFov = 800;
 var mouseStartX = 0;
 var mouseStartY = 0;
-
 
 function preload() {
     // Load a font to use.
@@ -21,9 +19,9 @@ function setup() {
     cam.setPosition(0, 0, camFov);
     ortho();
     cameraPosition = createVector(0, 0, -1);
-
+    // initiate cube
     initCube();
-    
+    // start auto shuffle
     setTimeout(()=>cube.randomShuffle(), 1000);
 }
   
@@ -56,10 +54,9 @@ function mouseReleased(){
 }
 
 function mouseDragged() {
-    let y = (pmouseX - mouseX);
-    let x = (pmouseY - mouseY);
-
     if(cube.cubeRotate){// rotate the cube
+        let y = (pmouseX - mouseX);
+        let x = (pmouseY - mouseY);
         test = [];
         cube.rotateCube(x * rotationSpeed, y * -rotationSpeed, 0);
     }else{// rotate plane
@@ -71,77 +68,39 @@ function mouseDragged() {
             // dont start rotation befor mouse movement min 10px
             if(Math.abs(x) > 10 || Math.abs(y) > 10){
                 // mouse start point
-                let p1 = {x : fixPositionWidth(mouseStartX), y : fixPositionHeight(mouseStartY), z : 0};
+                let msp = {x : fixPositionWidth(mouseStartX), y : fixPositionHeight(mouseStartY), z : 0};
                 // mouse end point
-                let p2 = {x : fixPositionWidth(mouseX), y : fixPositionHeight(mouseY), z : 0};
+                let mep = {x : fixPositionWidth(mouseX), y : fixPositionHeight(mouseY), z : 0};
                 // extend mouse end
-                const extendedP2 = extendVector(p1, p2, 1000000);
-                const selectedFace = cube.faces[cube.selectedFaceId];
-                const vertices = selectedFace.vertices;
-                const faceHierarchy = selectedFace.hierarchy;
+                const extendedP2 = extendVector(msp, mep, 1000000);
+                // const selectedFace = cube.faces[cube.selectedFaceId];
+                const vertices = cube.faces[cube.selectedFaceId].vertices;
                 // for every line in face check if mouse vector intersects it.
                 for(let i = 0 ; i < vertices.length; i++){
                     // set face line points
-                    let l1 = vertices[i].pointToPerspective();
-                    let l2 = vertices[(i + 1) % vertices.length].pointToPerspective();
+                    let flsp = vertices[i].pointToPerspective();
+                    let flep = vertices[(i + 1) % vertices.length].pointToPerspective();
                     // check if mouse vector intersect face line
-                    if(doLinesIntersect(p1, extendedP2, l1, l2)){
-                        let intersectVec = p5.Vector.sub(l1, l2);
+                    if(doLinesIntersect(msp, extendedP2, flsp, flep)){
+                        let intersectVec = p5.Vector.sub(flsp, flep);
                         let intersectAngleX = Math.abs(roundBase(degrees(cube.normalX.angleBetween(intersectVec)), 45));
                         let intersectAngleY = Math.abs(roundBase(degrees(cube.normalY.angleBetween(intersectVec)), 45));
                         let intersectAngleZ = Math.abs(roundBase(degrees(cube.normalZ.angleBetween(intersectVec)), 45));
 
-                        // console.log("normal x", intersectAngleX);
-                        // console.log("normal y", intersectAngleY);
-                        // console.log("normal z", intersectAngleZ);
-
                         if(intersectAngleX === 180 || intersectAngleX === 0){
                             // x axis
-                            console.log("rotate X axis");
-                            // cube.planeCut = cube.faces.filter(f => f.hierarchy.x === faceHierarchy.x);
-                            // cube.planeCutRotaionMagnitude *= intersectAngleX <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
-                            // cube.planeCutRotationAxis = cube.normalX;
-                            // if(selectedFace.hierarchy.x === 0){
-                            //     cube.faceCutType = 'left';
-                            // }else if(selectedFace.hierarchy.x === cube.dimension - 1){
-                            //     cube.faceCutType = 'right';
-                            // }else{
-                            //     cube.faceCutType = '';
-                            // }
                             let dir = intersectAngleX <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.createPlaneCut('x', dir);
                         }
 
                         if(intersectAngleY === 180 || intersectAngleY === 0){
                             // y axis
-                            console.log("rotate Y axis");
-                            // cube.planeCut = cube.faces.filter(f => f.hierarchy.y === faceHierarchy.y);
-                            // cube.planeCutRotaionMagnitude *= intersectAngleY <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
-                            // cube.planeCutRotationAxis = cube.normalY;
-                            // if(selectedFace.hierarchy.y === 0){
-                            //     cube.faceCutType = 'top';
-                            // }else if(selectedFace.hierarchy.y === cube.dimension - 1){
-                            //     cube.faceCutType = 'bottom';
-                            // }else{
-                            //     cube.faceCutType = '';
-                            // }
                             let dir = intersectAngleY <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.createPlaneCut('y', dir);
                         }
 
                         if(intersectAngleZ === 180 || intersectAngleZ === 0){
                             // z axis
-                            console.log("rotate Z axis");
-                            // cube.planeCut = cube.faces.filter(f => f.hierarchy.z === faceHierarchy.z);
-                            // cube.planeCutRotaionMagnitude *= intersectAngleZ <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
-                            // cube.planeCutRotationAxis = cube.normalZ;
-                            // if(selectedFace.hierarchy.z === 0){
-                            //     cube.faceCutType = 'back';
-                            // }else if(selectedFace.hierarchy.z === cube.dimension - 1){
-                            //     cube.faceCutType = 'front';
-                            // }else{
-                            //     cube.faceCutType = '';
-                            // }
                             let dir = intersectAngleZ <= 0 ? cube.planeCutRotaionMagnitude < 0 ? -1 : 1 : cube.planeCutRotaionMagnitude < 0 ? 1 : -1;
                             cube.createPlaneCut('z', dir);
                         }
@@ -361,5 +320,4 @@ function printCubeOrientation(){
 
 function stopProp(event){
     event.stopPropagation();
-    window.event.cancelBubble = true;
 }

@@ -352,4 +352,9 @@ class Cube{
             rect(posX, posY, this.flatQbSize, this.flatQbSize);
         }
     }
+
+    updateFov(){
+        camFov = document.getElementById('fovSlider').value;
+        console.log('camFov', camFov);
+    }
 }
