@@ -25,6 +25,17 @@ class Cube{
         this.faceCutType = '';
 
         this.shuffleIndex = 16;
+
+        this.showFlat = true;
+        this.flatQbSize = 30;
+        this.flatPos = {
+            'front' : {x: 0, y: 0},
+            'top' : {x: 0, y: 0},
+            'back' : {x: 0, y: 0},
+            'bottom' : {x: 0, y: 0},
+            'left' : {x: 0, y: 0},
+            'right' : {x: 0, y: 0},
+        }
     }
 
     initFaces(){
@@ -104,6 +115,21 @@ class Cube{
                 }
             }
         });
+        // set flat pos
+        let maxTop = height * -0.5 + this.flatQbSize;
+        let maxRight = width * 0.5 - this.flatQbSize;
+        this.flatPos.top.x = maxRight - this.dimension * 2 * this.flatQbSize;
+        this.flatPos.top.y = maxTop;
+        this.flatPos.front.x = maxRight -  this.dimension * 2 * this.flatQbSize;
+        this.flatPos.front.y = maxTop + this.dimension * this.flatQbSize;
+        this.flatPos.bottom.x = maxRight -  this.dimension * 2 * this.flatQbSize;
+        this.flatPos.bottom.y = maxTop + this.dimension * 2 * this.flatQbSize;
+        this.flatPos.back.x = maxRight -  this.dimension * 2 * this.flatQbSize;
+        this.flatPos.back.y = maxTop + this.dimension * 3 * this.flatQbSize;
+        this.flatPos.left.x = maxRight -  this.dimension * 3 * this.flatQbSize;
+        this.flatPos.left.y = maxTop + this.dimension * this.flatQbSize;
+        this.flatPos.right.x = maxRight -  this.dimension * this.flatQbSize;
+        this.flatPos.right.y = maxTop + this.dimension * this.flatQbSize;
     }
 
     render(){
@@ -121,6 +147,10 @@ class Cube{
             if(this.faces[i].isVisible){// render only visible faces
                 this.faces[i].render();
             }
+        }
+
+        if(this.showFlat){
+            this.printFlat();
         }
     }
 
@@ -289,5 +319,18 @@ class Cube{
         }
         this.dimension = cubeDimension = userD;
         initCube();
+    }
+
+    toggleShowFlat(){
+        this.showFlat = document.getElementById('showCubeFlat').checked;
+    }
+
+    printFlat(){
+        for(let i = 0; i < this.faces.length; i++){
+            fill(this.colors[this.faces[i].colorIndex]);
+            let posX = this.faces[i].type == 'left' || this.faces[i].type == 'right' ? this.faces[i].hierarchy.z : this.faces[i].hierarchy.x;
+            let posY = this.faces[i].type == "top" || this.faces[i].type == 'bottom' ? this.faces[i].hierarchy.z : this.faces[i].hierarchy.y;
+            rect(this.flatPos[this.faces[i].type].x + posX * this.flatQbSize, this.flatPos[this.faces[i].type].y + posY * this.flatQbSize, this.flatQbSize, this.flatQbSize);
+        }
     }
 }
