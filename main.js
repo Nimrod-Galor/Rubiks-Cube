@@ -2,7 +2,7 @@ var cam;
 var cube;
 var cameraPosition;
 var camFov = 800;
-var cubeDimantion = 3;
+var cubeDimension = 3;
 const rotationSpeed = 0.05;
 
 var mouseStartX = 0;
@@ -22,15 +22,17 @@ function setup() {
     ortho();
     cameraPosition = createVector(0, 0, -1);
 
-    let cubieSize = Math.ceil(300 / cubeDimantion);
-    cube = new Cube(cubeDimantion, cubieSize); //cubeDimantion, cubieSize
-    cube.initFaces();
-    cube.rotateCube(-45, 45, -35);
-
+    initCube();
+    
     setTimeout(()=>cube.randomShuffle(), 1000);
 }
   
-
+function initCube(){
+    let cubieSize = Math.ceil(300 / cubeDimension);
+    cube = new Cube(cubeDimension, cubieSize); //cubeDimension, cubieSize
+    cube.initFaces();
+    cube.rotateCube(-45, 45, -35);
+}
 
 function draw() {
     // set background color
@@ -101,7 +103,7 @@ function mouseDragged() {
                             // cube.planeCutRotationAxis = cube.normalX;
                             // if(selectedFace.hierarchy.x === 0){
                             //     cube.faceCutType = 'left';
-                            // }else if(selectedFace.hierarchy.x === cube.dimantion - 1){
+                            // }else if(selectedFace.hierarchy.x === cube.dimension - 1){
                             //     cube.faceCutType = 'right';
                             // }else{
                             //     cube.faceCutType = '';
@@ -118,7 +120,7 @@ function mouseDragged() {
                             // cube.planeCutRotationAxis = cube.normalY;
                             // if(selectedFace.hierarchy.y === 0){
                             //     cube.faceCutType = 'top';
-                            // }else if(selectedFace.hierarchy.y === cube.dimantion - 1){
+                            // }else if(selectedFace.hierarchy.y === cube.dimension - 1){
                             //     cube.faceCutType = 'bottom';
                             // }else{
                             //     cube.faceCutType = '';
@@ -135,7 +137,7 @@ function mouseDragged() {
                             // cube.planeCutRotationAxis = cube.normalZ;
                             // if(selectedFace.hierarchy.z === 0){
                             //     cube.faceCutType = 'back';
-                            // }else if(selectedFace.hierarchy.z === cube.dimantion - 1){
+                            // }else if(selectedFace.hierarchy.z === cube.dimension - 1){
                             //     cube.faceCutType = 'front';
                             // }else{
                             //     cube.faceCutType = '';

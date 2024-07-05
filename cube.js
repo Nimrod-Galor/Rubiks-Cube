@@ -1,6 +1,6 @@
 class Cube{
-    constructor(dimantion, cubieSize){
-        this.dimantion = dimantion;
+    constructor(dimension, cubieSize){
+        this.dimension = dimension;
         this.cubieSize = cubieSize;
         this.faces = [];
         this.colors = [
@@ -29,10 +29,10 @@ class Cube{
 
     initFaces(){
         //initiate cube
-        let R = this.dimantion * this.cubieSize * 0.5;
-        for(let z = 0; z < this.dimantion; z++){
-            for(let x = 0; x < this.dimantion; x++){
-                for(let y = 0; y < this.dimantion; y++){
+        let R = this.dimension * this.cubieSize * 0.5;
+        for(let z = 0; z < this.dimension; z++){
+            for(let x = 0; x < this.dimension; x++){
+                for(let y = 0; y < this.dimension; y++){
                     let hierarchy = {z: z, x: x, y: y};
                     let mx = (x * this.cubieSize - R) + (this.cubieSize * 0.5);
                     let my = (y * this.cubieSize - R) + (this.cubieSize * 0.5);
@@ -45,7 +45,7 @@ class Cube{
                         this.faces.push(f);
                     }
                     
-                    if(z === this.dimantion - 1){   // front face
+                    if(z === this.dimension - 1){   // front face
                         let f = new Face('front', 1, hierarchy);
                         let mz = R;
                         f.moveFace(mx, my, mz);
@@ -60,7 +60,7 @@ class Cube{
                         this.faces.push(f);
                     }
                     
-                    if(y === this.dimantion - 1){   // bottom face
+                    if(y === this.dimension - 1){   // bottom face
                         let f = new Face('bottom', 5, hierarchy);
                         let my = R;
                         f.rotateFace(-90, 0, 0);
@@ -77,7 +77,7 @@ class Cube{
                         this.faces.push(f);
                     }
 
-                    if(x ===  this.dimantion - 1){  // right face
+                    if(x ===  this.dimension - 1){  // right face
                         let f = new Face('right', 2, hierarchy);
                         let mx = R;
                         f.rotateFace(0, 90, 0);
@@ -146,7 +146,7 @@ class Cube{
             this.planeCutRotationAxis = this.normalX;
             if(faceHierarchy[axis] === 0){
                 this.faceCutType = 'left';
-            }else if(faceHierarchy[axis] === this.dimantion - 1){
+            }else if(faceHierarchy[axis] === this.dimension - 1){
                 this.faceCutType = 'right';
             }else{
                 this.faceCutType = '';
@@ -157,7 +157,7 @@ class Cube{
             this.planeCutRotationAxis = this.normalY;
             if(faceHierarchy[axis] === 0){
                 this.faceCutType = 'top';
-            }else if(faceHierarchy[axis] === this.dimantion - 1){
+            }else if(faceHierarchy[axis] === this.dimension - 1){
                 this.faceCutType = 'bottom';
             }else{
                 this.faceCutType = '';
@@ -168,7 +168,7 @@ class Cube{
             this.planeCutRotationAxis = this.normalZ;
             if(faceHierarchy[axis] === 0){
                 this.faceCutType = 'back';
-            }else if(faceHierarchy[axis] === this.dimantion - 1){
+            }else if(faceHierarchy[axis] === this.dimension - 1){
                 this.faceCutType = 'front';
             }else{
                 this.faceCutType = '';
@@ -197,9 +197,9 @@ class Cube{
             //convert plane array to matrix
             let faceMatrix = [];
             let index = 0;
-            for(let r = 0; r < this.dimantion; r++){
+            for(let r = 0; r < this.dimension; r++){
                 faceMatrix[r] = [];
-                for(let c = 0; c < this.dimantion; c++){
+                for(let c = 0; c < this.dimension; c++){
                     faceMatrix[r][c] = faceCut[index].colorIndex;
                     index++;
                 }
@@ -209,8 +209,8 @@ class Cube{
 
             // update colors
             index = 0;
-            for(let r = 0; r < this.dimantion; r++){
-                for(let c = 0; c < this.dimantion; c++){
+            for(let r = 0; r < this.dimension; r++){
+                for(let c = 0; c < this.dimension; c++){
                     // update face plane cubie colors
                     faceCut[index].colorIndex = faceMatrix[r][c];
                     index++;
@@ -225,12 +225,12 @@ class Cube{
         let modArr;
 
         if((this.planeCutRotaionMagnitude <= 0 && this.planeCutRotationAxis != this.normalY) || (this.planeCutRotaionMagnitude > 0 && this.planeCutRotationAxis == this.normalY)){
-            let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimantion)));
-            let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(-this.dimantion)));
+            let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, -this.dimension)));
+            let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(-this.dimension)));
             modArr = [...endItems, ...startItems];
         }else{
-            let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, this.dimantion)));
-            let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(this.dimantion)));
+            let startItems = JSON.parse(JSON.stringify(this.planeCut.slice(0, this.dimension)));
+            let endItems = JSON.parse(JSON.stringify(this.planeCut.slice(this.dimension)));
             modArr = [...endItems, ...startItems];
         }
 
@@ -239,9 +239,9 @@ class Cube{
         for(let i = 0; i < this.planeCut.length; i++){
             if(faceIndex == 0 && this.normalY == this.planeCutRotationAxis){
                 // whene rotating on Y axis we need to flip left and right face cubies order
-                let rev = modArr.splice(i, this.dimantion);
+                let rev = modArr.splice(i, this.dimension);
                 modArr.splice(i, 0, ...rev.reverse());
-                faceIndex = this.dimantion;
+                faceIndex = this.dimension;
             }
             this.planeCut[i].colorIndex = modArr[i].colorIndex;
             faceIndex--;
@@ -268,12 +268,26 @@ class Cube{
     randomShuffle(){
         for(let i = 0; i < this.shuffleIndex; i++){
             setTimeout(()=>{
-                this.selectedFaceId = Math.floor(Math.random() * (this.dimantion * this.dimantion * 6));
+                this.selectedFaceId = Math.floor(Math.random() * (this.dimension * this.dimension * 6));
                 let dir = Math.random() > 0.5 ? 1 : -1;
                 let axis = Math.floor(Math.random() * 3);
                 axis = axis === 0 ? "z" : axis === 1 ? "x" : "y";
                 this.createPlaneCut(axis, dir);
             }, i * 500);
         }
+    }
+
+    updateDimensions(){
+        let userD = parseInt(document.getElementById('inputDimension').value);
+        if(userD < 2){
+            alert("minimum dimension allowed is 2");
+            document.getElementById('inputDimension').value = 2;
+            return;
+        }
+        if(userD === this.dimension){
+            return;
+        }
+        this.dimension = cubeDimension = userD;
+        initCube();
     }
 }
