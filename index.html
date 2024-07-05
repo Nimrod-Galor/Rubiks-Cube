@@ -31,7 +31,7 @@
     <title>Rubiks Cube</title>
 </head>
 <body>
-    <div class="menuWrapper">
+    <div class="menuWrapper" id="menuWrapper" onclick="stopProp(event)" oncontextmenu="stopProp(event)" ondblclick="stopProp(event)" onmousedown="stopProp(event)" ontouchmove="stopProp(event)" ontouchstart="stopProp(event)">
         <div class="accordion" id="accordionMenu">
             <div class="accordion-item">
               <h2 class="accordion-header">
@@ -64,7 +64,7 @@
 
                                 <div class="row mb-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="showCubeFlat" onchange="cube.toggleShowFlat()">
+                                        <input class="form-check-input" type="checkbox" id="showCubeFlat" onchange="cube.toggleShowFlat()" checked>
                                         <label class="form-check-label" for="showCubeFlat">
                                             Show Cube Flat
                                         </label>

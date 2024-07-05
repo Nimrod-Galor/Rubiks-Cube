@@ -358,3 +358,8 @@ function printCubeOrientation(){
     let vecZ = extendVector({x:0,y:0}, cube.normalZ, 50);
     drawArrow(originVec, createVector(vecZ.x, vecZ.y, 0), 'red');
 }
+
+function stopProp(event){
+    event.stopPropagation();
+    window.event.cancelBubble = true;
+}
