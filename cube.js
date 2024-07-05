@@ -117,18 +117,19 @@ class Cube{
         });
         // set flat pos
         let maxTop = height * -0.5 + this.flatQbSize;
-        let maxRight = width * 0.5 - this.flatQbSize;
+        let maxRight = width * 0.5 -
+         this.flatQbSize;
         this.flatPos.top.x = maxRight - this.dimension * 2 * this.flatQbSize;
         this.flatPos.top.y = maxTop;
         this.flatPos.front.x = maxRight -  this.dimension * 2 * this.flatQbSize;
         this.flatPos.front.y = maxTop + this.dimension * this.flatQbSize;
         this.flatPos.bottom.x = maxRight -  this.dimension * 2 * this.flatQbSize;
-        this.flatPos.bottom.y = maxTop + this.dimension * 2 * this.flatQbSize;
+        this.flatPos.bottom.y = maxTop + this.dimension * 3 * this.flatQbSize - this.flatQbSize;
         this.flatPos.back.x = maxRight -  this.dimension * 2 * this.flatQbSize;
-        this.flatPos.back.y = maxTop + this.dimension * 3 * this.flatQbSize;
+        this.flatPos.back.y = maxTop + this.dimension * 4 * this.flatQbSize - this.flatQbSize;
         this.flatPos.left.x = maxRight -  this.dimension * 3 * this.flatQbSize;
         this.flatPos.left.y = maxTop + this.dimension * this.flatQbSize;
-        this.flatPos.right.x = maxRight -  this.dimension * this.flatQbSize;
+        this.flatPos.right.x = maxRight - this.flatQbSize;
         this.flatPos.right.y = maxTop + this.dimension * this.flatQbSize;
     }
 
@@ -328,9 +329,27 @@ class Cube{
     printFlat(){
         for(let i = 0; i < this.faces.length; i++){
             fill(this.colors[this.faces[i].colorIndex]);
-            let posX = this.faces[i].type == 'left' || this.faces[i].type == 'right' ? this.faces[i].hierarchy.z : this.faces[i].hierarchy.x;
-            let posY = this.faces[i].type == "top" || this.faces[i].type == 'bottom' ? this.faces[i].hierarchy.z : this.faces[i].hierarchy.y;
-            rect(this.flatPos[this.faces[i].type].x + posX * this.flatQbSize, this.flatPos[this.faces[i].type].y + posY * this.flatQbSize, this.flatQbSize, this.flatQbSize);
+            let posX = this.flatPos[this.faces[i].type].x;
+            // posX += this.faces[i].type == 'left' || this.faces[i].type == 'right' ? this.faces[i].hierarchy.z * this.flatQbSize : this.faces[i].hierarchy.x * this.flatQbSize;
+            if(this.faces[i].type == 'left'){
+                posX += this.faces[i].hierarchy.z * this.flatQbSize;
+            }else if(this.faces[i].type == 'right'){
+                posX -= this.faces[i].hierarchy.z * this.flatQbSize;
+            }else{
+                posX += this.faces[i].hierarchy.x * this.flatQbSize;
+            }
+            let posY = this.flatPos[this.faces[i].type].y;
+            // posY += this.faces[i].type == "top" || this.faces[i].type == 'bottom' ? this.faces[i].hierarchy.z * this.flatQbSize : this.faces[i].hierarchy.y * this.flatQbSize;
+            if(this.faces[i].type == "top"){
+                posY += this.faces[i].hierarchy.z * this.flatQbSize;
+            }else if(this.faces[i].type == 'bottom'){
+                posY -= this.faces[i].hierarchy.z * this.flatQbSize;
+            }else if(this.faces[i].type == 'back'){
+                posY -= this.faces[i].hierarchy.y * this.flatQbSize;
+            }else{
+                posY += this.faces[i].hierarchy.y * this.flatQbSize;
+            }
+            rect(posX, posY, this.flatQbSize, this.flatQbSize);
         }
     }
 }
