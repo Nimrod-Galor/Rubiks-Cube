@@ -282,6 +282,10 @@ class Cube{
         this.planeCut = [];
         // this.cutRotate = false;
         this.planeCutRotaionDone = 0;
+
+        if(this.shuffleIndex < 16){
+            this.randomShuffle();
+        }
     }
 
     detectFaceClicked(x, y){
@@ -297,15 +301,16 @@ class Cube{
     }
 
     randomShuffle(){
-        for(let i = 0; i < this.shuffleIndex; i++){
+        this.shuffleIndex = this.shuffleIndex <= 1 ? 16 : this.shuffleIndex-1;
+        // for(let i = 0; i < this.shuffleIndex; i++){
             setTimeout(()=>{
                 this.selectedFaceId = Math.floor(Math.random() * (this.dimension * this.dimension * 6));
                 let dir = Math.random() > 0.5 ? 1 : -1;
                 let axis = Math.floor(Math.random() * 3);
                 axis = axis === 0 ? "z" : axis === 1 ? "x" : "y";
                 this.createPlaneCut(axis, dir);
-            }, i * 500);
-        }
+            }, 200);
+        // }
     }
 
     updateDimensions(){
