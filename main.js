@@ -321,3 +321,37 @@ function printCubeOrientation(){
 function stopProp(event){
     event.stopPropagation();
 }
+
+function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    mouseStartX = e.clientX;
+    mouseStartY = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+}
+
+function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = mouseStartX - e.clientX;
+    pos2 = mouseStartY - e.clientY;
+    mouseStartX = e.clientX;
+    mouseStartY = e.clientY;
+    // set the element's new position:
+    let elmnt = document.getElementById('menuWrapper');
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+}
+
+function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+}
+
+
+document.getElementById('accordion-header').addEventListener('mousedown', dragMouseDown);
