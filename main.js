@@ -44,7 +44,6 @@ function mousePressed(){
     mouseStartX = mouseX;
     mouseStartY = mouseY;
     cube.detectFaceClicked(fixPositionWidth(mouseX), fixPositionHeight(mouseY));
-    // console.log('mouseX', mouseX, 'fix x', fixPositionWidth(mouseX), 'mouseY', mouseY, 'fix y', fixPositionHeight(mouseY));
 }
 
 function mouseReleased(){
@@ -68,11 +67,11 @@ function mouseDragged() {
             // dont start rotation befor mouse movement min 10px
             if(Math.abs(x) > 10 || Math.abs(y) > 10){
                 // mouse start point
-                let msp = {x : fixPositionWidth(mouseStartX), y : fixPositionHeight(mouseStartY), z : 0};
+                let mouseStartPoint = {x : fixPositionWidth(mouseStartX), y : fixPositionHeight(mouseStartY), z : 0};
                 // mouse end point
-                let mep = {x : fixPositionWidth(mouseX), y : fixPositionHeight(mouseY), z : 0};
+                let mouseEndPoint = {x : fixPositionWidth(mouseX), y : fixPositionHeight(mouseY), z : 0};
                 // extend mouse end
-                const extendedP2 = extendVector(msp, mep, 1000000);
+                const extendedP2 = extendVector(mouseStartPoint, mouseEndPoint, 1000000);
                 // const selectedFace = cube.faces[cube.selectedFaceId];
                 const vertices = cube.faces[cube.selectedFaceId].vertices;
                 // for every line in face check if mouse vector intersects it.
@@ -81,7 +80,7 @@ function mouseDragged() {
                     let flsp = vertices[i].pointToPerspective();
                     let flep = vertices[(i + 1) % vertices.length].pointToPerspective();
                     // check if mouse vector intersect face line
-                    if(doLinesIntersect(msp, extendedP2, flsp, flep)){
+                    if(doLinesIntersect(mouseStartPoint, extendedP2, flsp, flep)){
                         let intersectVec = p5.Vector.sub(flsp, flep);
                         let intersectAngleX = Math.abs(roundBase(degrees(cube.normalX.angleBetween(intersectVec)), 45));
                         let intersectAngleY = Math.abs(roundBase(degrees(cube.normalY.angleBetween(intersectVec)), 45));
